@@ -44,6 +44,7 @@ async function boot() {
   defineRoute('play', (ctx) => import('./screens/play.js').then((m) => m.render(ctx)));
   defineRoute('lab', (ctx) => import('./screens/play.js')
     .then((m) => m.render({ segments: ['lab'], query: ctx.query })));
+  defineRoute('tabletop', (ctx) => import('./screens/tabletop.js').then((m) => m.render(ctx)));
   defineRoute('complete', () => import('./screens/complete.js').then((m) => m.render()));
   defineRoute('settings', () => import('./screens/settings.js').then((m) => m.render()));
   defineRoute('stats', () => import('./screens/stats.js').then((m) => m.render()));

@@ -40,6 +40,32 @@ function trackPanel(track) {
       })));
 }
 
+/**
+ * Times typed in after solving on a physical set. They are kept apart from the
+ * campaign numbers above because nothing verified them — the engine never saw
+ * those runs, so they move no rating and no streak.
+ */
+function tabletopPanel() {
+  const summary = store.tabletopSummary();
+  return h('div', null,
+    h('div', { class: 'row', style: { justifyContent: 'space-between', marginBottom: '14px' } },
+      h('div', { class: 'eyebrow', text: 'TABLETOP' }),
+      h('button', {
+        class: 'mono',
+        type: 'button',
+        style: { fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.12em' },
+        text: summary.setups ? 'OPEN LOGBOOK ›' : 'GENERATE AN OPENING ›',
+        onClick: () => navigate('/tabletop')
+      })),
+    h('div', { class: 'grid2' },
+      statCard('OPENINGS', String(summary.setups)),
+      statCard('SOLVED OFFLINE', `${summary.solved} / ${summary.setups}`),
+      statCard('ATTEMPTS LOGGED', String(summary.attempts)),
+      statCard('BEST', summary.bestMs === null ? '—' : formatTime(summary.bestMs), { accent: true })),
+    h('div', { class: 'notice', style: { marginTop: '10px' },
+      text: 'HAND-ENTERED TIMES FROM THE PHYSICAL SET. THEY DO NOT MOVE THE RATING OR THE STREAK.' }));
+}
+
 export function render() {
   const week = store.weekStats();
   const rank = rankFor(store.profile.elo);
@@ -73,6 +99,8 @@ export function render() {
 
         ...allTracks().map(trackPanel),
 
+        tabletopPanel(),
+
         h('div', null,
           h('div', { class: 'eyebrow', style: { marginBottom: '14px' }, text: 'RECENT RUNS' }),
           h('div', { class: 'movelog' },
@@ -82,7 +110,9 @@ export function render() {
                 return h('div', { class: 'movelog__row' },
                   h('div', { class: `movelog__dot${run.assisted ? ' is-warn' : ''}` }),
                   h('div', { class: 'movelog__text', text: (found ? `${found.tier.name.toUpperCase()} ${String(found.puzzle.order).padStart(2, '0')}`
-                    : run.puzzleId.startsWith('free-') ? 'FREE MODE' : run.puzzleId.toUpperCase()) + (run.assisted ? ' · ASSISTED' : '') }),
+                    : run.puzzleId.startsWith('free-') ? 'FREE MODE'
+                      : run.puzzleId.startsWith('setup-') ? 'TABLETOP OPENING'
+                        : run.puzzleId.toUpperCase()) + (run.assisted ? ' · ASSISTED' : '') }),
                   h('div', { class: 'movelog__t', text: formatTime(run.ms) }));
               })
               : h('div', { class: 'movelog__row' },

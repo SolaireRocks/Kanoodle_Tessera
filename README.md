@@ -39,7 +39,7 @@ Once the page loads, "Add to Home Screen" installs it as a standalone app —
 Set `HOST=127.0.0.1` to go back to serving this machine only.
 
 ```sh
-npm test           # rules-core tests (25)
+npm test           # rules-core tests (35)
 npm run content    # regenerate and re-validate content/puzzles.json
 npm run census     # count the solutions behind every one-piece opening -> census/
 npm run test:browser   # headless UI checks; needs `npm i -D puppeteer-core` and a running server
@@ -57,14 +57,15 @@ npm run test:browser   # headless UI checks; needs `npm i -D puppeteer-core` and
 | 3-D pyramid | M-06 / D-05 |
 | Completion | M-07 / D-06 |
 | Settings and accessibility | M-08 |
+| Tabletop | — (no artboard) |
 
-Plus two screens the design implies but does not draw: **Stats** (the nav's
-fourth tab) and **Solver Lab** (its own mode card). Free mode reuses the 2-D
-gameplay screen, with an opening chooser above the board until a first piece is
-down.
+Plus three screens the design implies but does not draw: **Stats** (the nav's
+fourth tab), **Solver Lab** and **Tabletop**, each with its own mode card. Free
+mode reuses the 2-D gameplay screen, with an opening chooser above the board
+until a first piece is down.
 
 **Modes** — Classic 2-D, Pyramid, Free mode, Time Attack, Daily Lattice, Head to
-head, Zen, Solver Lab.
+head, Zen, Solver Lab, Tabletop.
 
 **Content** — 101 challenges, matching §9.1: seven 2-D tiers (76 puzzles, one
 through seven pieces remaining) and four pyramid levels (25 puzzles). They are
@@ -80,6 +81,7 @@ src/core/      pure rules engine — no DOM, no rendering
   solver.js      Algorithm X / dancing links: validate, solve, count, recommend
   session.js     one run: moves, undo/redo, clock, assistance flags
   generate.js    puzzle generation and difficulty measurement
+  tabletop.js    openings for the physical set: coordinates, text, durations
   rng.js         seeded randomness for the Daily and for generation
 src/workers/   the solver, off the main thread
 src/ui/        screens, components, router, local-first store
@@ -143,6 +145,29 @@ out of a whole random fill, so it is solvable by construction. Runs are keyed by
 their opening, which gives each one its own best time and a replay link
 (`#/play/free?code=…`) that reopens the same board.
 
+### Tabletop
+
+The mode for the set on your table rather than the one on screen. You say which
+surface, how many pieces to start with, and whether the engine chooses them or
+you pin the ones you want; it rolls an opening and draws it as a lettered sheet
+— rows `A`–`E`, columns numbered, every occupied socket carrying its piece
+letter — so it can be copied bead for bead onto the real board. `Copy setup`
+puts the same thing on the clipboard as plain text with an ASCII diagram, and
+`Print sheet` prints it with blank lines for times.
+
+Openings come out of a complete fill, the same guarantee the campaigns get, so
+the pieces left in the bag always finish the board. Pinning as many pieces as
+the count means the opening is exactly those pieces; pinning fewer fills the
+rest at random; pinning none is a straight roll. A seed is recorded with every
+opening and re-entering it rebuilds the same one.
+
+Then you solve it away from the screen and type the time in. Times are kept
+against that exact opening — best, average, last, and the whole run of attempts
+— so a second go at the same board is comparable. Because nothing verified them,
+they live in their own logbook and never move the rating or the streak; the
+Stats screen shows them under their own heading, labelled as hand-entered. Each
+opening can also be played on screen (`#/play/setup?code=…`), on either surface.
+
 ### Assistance
 
 Hint is a three-step ladder — which piece, then its orientation, then a pulsing
@@ -194,6 +219,7 @@ piece · arrows and `Enter` to place · `Esc` pause.
   backend.
 - Puzzle Rush and the player-facing Puzzle Creator (§4 phase 4). The pieces are
   in place: the Solver Lab already validates an arbitrary setup and exports a
-  challenge code, and `generate.js` can build and grade puzzles on demand.
+  challenge code, Tabletop generates constrained openings on demand, and
+  `generate.js` can build and grade puzzles.
 - Audio. The setting exists for haptics, which do work where the browser
   supports them; there are no sounds yet.

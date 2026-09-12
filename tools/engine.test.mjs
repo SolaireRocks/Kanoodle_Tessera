@@ -20,6 +20,11 @@ import {
 } from '../src/core/solver.js';
 import { Session } from '../src/core/session.js';
 import { makeRng, dailyKey } from '../src/core/rng.js';
+import {
+  buildSetup, chooseSetupPieces, socketName, socketIndex,
+  setupText, setupDiagram, remainingPieces, remainingBeads,
+  parseDuration, timeStats
+} from '../src/core/tabletop.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const library = JSON.parse(readFileSync(resolve(here, '../content/puzzles.json'), 'utf8'));
@@ -491,4 +496,111 @@ test('locking a free opening restarts the run around that piece', () => {
   session.reset();
   assert.equal(session.filledCount(), opening.cells.length);
   assert.equal(session.remove(opening.piece), false);
+});
+
+/* ------------------------------------------------------------- tabletop -- */
+
+test('a tabletop opening is solvable with the pieces left in the bag', () => {
+  for (const dimension of ['2D', '3D']) {
+    for (const count of [1, 3, 7, 11]) {
+      const setup = buildSetup({ dimension, count, seed: `tt/${dimension}/${count}` });
+      assert.equal(setup.locked.length, count, `${dimension} r${count} piece count`);
+      assert.equal(remainingPieces(setup).length, 12 - count);
+
+      const state = { dimension, locked: setup.locked, placed: [] };
+      assert.ok(validate(state).legal, `${dimension} r${count} is a legal setup`);
+      const finish = findOneSolution(state);
+      assert.ok(finish, `${dimension} r${count} can still be finished`);
+      assert.equal(finish.length, 12 - count);
+      // The beads left over are exactly the hole the remaining pieces fill.
+      assert.equal(remainingBeads(setup), occupancyOf(state).emptyCells.length);
+    }
+  }
+});
+
+test('pinned pieces always make the opening, and the rest are rolled', () => {
+  const pinned = ['L', 'F'];
+  const setup = buildSetup({ dimension: '2D', count: 5, pinned, seed: 'pinned-run' });
+  const pieces = setup.locked.map((p) => p.piece);
+  assert.equal(pieces.length, 5);
+  for (const id of pinned) assert.ok(pieces.includes(id), `piece ${id} was pinned`);
+
+  // Pinning as many pieces as the count means the opening is exactly those.
+  const exact = buildSetup({ dimension: '2D', count: 3, pinned: ['A', 'B', 'C'], seed: 'exact' });
+  assert.deepEqual(exact.locked.map((p) => p.piece), ['A', 'B', 'C']);
+
+  // More pins than the count is not silently honoured — the count wins.
+  const capped = chooseSetupPieces({ count: 2, pinned: ['A', 'B', 'C', 'D'], seed: 'capped' });
+  assert.deepEqual(capped, ['A', 'B']);
+});
+
+test('the same seed rebuilds the same opening, a different one does not', () => {
+  const a = buildSetup({ dimension: '2D', count: 4, seed: 'repeat-me' });
+  const b = buildSetup({ dimension: '2D', count: 4, seed: 'repeat-me' });
+  const c = buildSetup({ dimension: '2D', count: 4, seed: 'something-else' });
+  assert.deepEqual(a.locked, b.locked);
+  assert.notDeepEqual(a.locked, c.locked);
+});
+
+test('socket shorthand round-trips on both surfaces', () => {
+  for (const dimension of ['2D', '3D']) {
+    const target = getTarget(dimension);
+    for (const cell of target.cells) {
+      const name = socketName(dimension, cell.index);
+      assert.equal(socketIndex(dimension, name), cell.index, `${dimension} ${name}`);
+    }
+  }
+  assert.equal(socketIndex('2D', 'A1'), 0);
+  assert.equal(socketIndex('2D', 'E11'), 54);
+  assert.equal(socketIndex('2D', 'F1'), null);      // only five rows
+  assert.equal(socketIndex('2D', 'A12'), null);     // only eleven columns
+  assert.equal(socketIndex('3D', 'L5B1'), null);    // the apex layer is 1 x 1
+  assert.equal(socketIndex('3D', 'nonsense'), null);
+});
+
+test('the printable setup text names every piece and every socket it covers', () => {
+  const setup = buildSetup({ dimension: '2D', count: 3, seed: 'text' });
+  const text = setupText(setup, { label: 'Board · 3 pieces', code: 'T1:2:TEST' });
+  for (const placement of setup.locked) {
+    assert.ok(text.includes(`  ${placement.piece} (${placement.cells.length})`), `piece ${placement.piece} listed`);
+    for (const cell of placement.cells) {
+      assert.ok(text.includes(socketName('2D', cell)), `socket ${socketName('2D', cell)} listed`);
+    }
+  }
+  assert.ok(text.includes('T1:2:TEST'));
+  assert.ok(text.includes(remainingPieces(setup).join(' ')));
+
+  // The diagram is 5 rows of 11, occupied sockets carrying their piece letter.
+  const rows = setupDiagram(setup).split('\n').slice(1);
+  assert.equal(rows.length, 5);
+  const letters = rows.join('').replace(/[^A-L]/g, '');
+  const drawn = new Set(letters.split(''));
+  for (const placement of setup.locked) {
+    assert.ok(drawn.has(placement.piece), `piece ${placement.piece} drawn`);
+  }
+});
+
+test('hand-typed times are read the way they are written', () => {
+  assert.equal(parseDuration('2:05'), 125_000);
+  assert.equal(parseDuration('2:05.4'), 125_400);
+  assert.equal(parseDuration('1:02:03'), 3_723_000);
+  assert.equal(parseDuration('125'), 125_000);
+  assert.equal(parseDuration('90.5'), 90_500);
+  assert.equal(parseDuration('2m 5s'), 125_000);
+  assert.equal(parseDuration('1h30m'), 5_400_000);
+  assert.equal(parseDuration(' 45 sec '), 45_000);
+
+  for (const bad of ['', '   ', 'soon', '0', '0:00', '-5', '2:75', 'abc:def', '1:2:3:4']) {
+    assert.equal(parseDuration(bad), null, `"${bad}" is not a time`);
+  }
+});
+
+test('a run of attempts reports best, mean and last', () => {
+  const stats = timeStats([{ ms: 90_000 }, { ms: 60_000 }, { ms: 75_000 }]);
+  assert.equal(stats.count, 3);
+  assert.equal(stats.bestMs, 60_000);
+  assert.equal(stats.worstMs, 90_000);
+  assert.equal(stats.meanMs, 75_000);
+  assert.equal(stats.lastMs, 75_000);
+  assert.deepEqual(timeStats([]), { count: 0, bestMs: null, worstMs: null, meanMs: null, lastMs: null });
 });

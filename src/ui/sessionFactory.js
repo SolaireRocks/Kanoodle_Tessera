@@ -196,6 +196,33 @@ export function buildPlay(segments, query = {}) {
     };
   }
 
+  if (key === 'setup') {
+    // A tabletop opening, played on screen. The code carries the whole setup,
+    // so this route works for both surfaces and needs no library entry.
+    let decoded;
+    try {
+      decoded = decodeChallenge(decodeURIComponent(query.code || ''));
+    } catch {
+      return null;
+    }
+    const pieces = decoded.locked.length;
+    const session = new Session({
+      puzzleId: `setup-${encodeChallenge(decoded)}`,
+      dimension: decoded.dimension,
+      locked: decoded.locked,
+      parMs: 0,
+      mode: 'setup',
+      title: 'Tabletop opening',
+      subtitle: `TABLETOP · ${pieces} SET OUT · ${12 - pieces} TO PLACE`,
+      shortSubtitle: `TABLETOP · ${12 - pieces} TO PLACE`
+    });
+    return {
+      session,
+      entry: null,
+      rules: { ...DEFAULT_RULES, hintPenaltyMs: 0, backHref: '/tabletop' }
+    };
+  }
+
   if (key === 'lab') {
     const dimension = query.dim === '3D' ? '3D' : '2D';
     const session = new Session({
@@ -236,6 +263,7 @@ function rulesForMode(mode) {
     case 'versus': return { allowHint: false, allowSolve: false, ranked: true };
     case 'zen': return { timer: 'none', hintPenaltyMs: 0 };
     case 'free': return { hintPenaltyMs: 0 };
+    case 'setup': return { hintPenaltyMs: 0 };
     case 'lab': return { timer: 'none', hintPenaltyMs: 0 };
     default: return {};
   }
@@ -248,6 +276,7 @@ export function nextAfter(session, entry) {
   }
   if (session.mode === 'zen') return `/play/zen?seed=${Date.now()}`;
   if (session.mode === 'free') return '/play/free';
+  if (session.mode === 'setup') return '/tabletop';
   if (session.mode === 'daily' || session.mode === 'versus') return '/home';
   if (!entry) return '/home';
   const following = entry.tier.puzzles.find((p) => p.order > entry.puzzle.order && !store.isSolved(p.id))
@@ -269,6 +298,9 @@ export function restartHref(session) {
     case 'timeattack': return '/play/timeattack?restart=1';
     case 'versus': return '/play/versus';
     case 'zen': return `/play/zen?seed=${Date.now()}`;
+    case 'setup': return `/play/setup?code=${encodeURIComponent(encodeChallenge({
+      dimension: session.dimension, locked: session.locked, placed: []
+    }))}`;
     case 'free': return session.locked.length
       ? `/play/free?code=${encodeURIComponent(encodeChallenge({
         dimension: session.dimension, locked: session.locked, placed: []

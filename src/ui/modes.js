@@ -42,6 +42,12 @@ export const MODES = [
     chipBg: 'rgba(143,217,75,0.16)', chipFg: '#8FD94B'
   },
   {
+    id: 'tabletop', tag: 'TT', name: 'Tabletop',
+    desc: 'Roll an opening for the physical set, then log the times you get away from the screen.',
+    href: '/tabletop', meta: 'OFFLINE',
+    chipBg: 'rgba(255,138,61,0.16)', chipFg: '#FF8A3D'
+  },
+  {
     id: 'lab', tag: 'LB', name: 'Solver Lab',
     desc: 'Recreate a physical board and ask the engine for the next legal move.',
     href: '/lab', meta: 'UNRANKED',

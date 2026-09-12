@@ -38,9 +38,13 @@ function blankProfile() {
     history: [],
     elo: 1200,
     streak: { count: 0, lastDay: null },
-    session: null
+    session: null,
+    tabletop: []
   };
 }
+
+/** Tabletop keeps a long tail — it is a logbook, not a recent-runs list. */
+const MAX_TABLETOP_SETUPS = 120;
 
 function read() {
   try {
@@ -51,7 +55,9 @@ function read() {
     return {
       ...blankProfile(),
       ...parsed,
-      settings: { ...DEFAULT_SETTINGS, ...(parsed.settings || {}) }
+      settings: { ...DEFAULT_SETTINGS, ...(parsed.settings || {}) },
+      // Added after v1 shipped; a profile written before it simply has none.
+      tabletop: Array.isArray(parsed.tabletop) ? parsed.tabletop : []
     };
   } catch {
     return blankProfile();
@@ -178,6 +184,104 @@ class Store extends EventTarget {
   }
 
   get savedSession() { return this.profile.session; }
+
+  /* -------------------------------------------------------- tabletop log -- */
+
+  /**
+   * Openings generated for a physical set, newest first, each with the times
+   * the player typed in after solving it away from the screen.
+   *
+   * These times are hand-entered and unverifiable, so they stay in their own
+   * logbook: they never touch `progress`, the rating or the streak, which are
+   * only ever moved by a run the engine actually watched.
+   */
+  get tabletopSetups() { return this.profile.tabletop; }
+
+  tabletopSetup(id) {
+    return this.profile.tabletop.find((entry) => entry.id === id) || null;
+  }
+
+  /** An existing setup with the same code is reused, so a re-roll of the same
+   *  opening lands in one logbook entry rather than splitting its times. */
+  saveTabletopSetup(setup) {
+    const existing = this.profile.tabletop.find((entry) => entry.code === setup.code);
+    if (existing) {
+      this.profile.tabletop = [existing, ...this.profile.tabletop.filter((e) => e !== existing)];
+      this.save();
+      return existing;
+    }
+    const entry = {
+      id: `tt-${Date.now().toString(36)}-${Math.floor(Math.random() * 1296).toString(36).padStart(2, '0')}`,
+      createdAt: Date.now(),
+      dimension: setup.dimension,
+      locked: setup.locked.map((p) => ({ piece: p.piece, cells: p.cells.slice() })),
+      code: setup.code,
+      seed: setup.seed || null,
+      pinned: setup.pinned ? setup.pinned.slice() : [],
+      label: setup.label || null,
+      note: '',
+      times: []
+    };
+    this.profile.tabletop.unshift(entry);
+    if (this.profile.tabletop.length > MAX_TABLETOP_SETUPS) {
+      this.profile.tabletop.length = MAX_TABLETOP_SETUPS;
+    }
+    this.save();
+    return entry;
+  }
+
+  removeTabletopSetup(id) {
+    const before = this.profile.tabletop.length;
+    this.profile.tabletop = this.profile.tabletop.filter((entry) => entry.id !== id);
+    if (this.profile.tabletop.length !== before) this.save();
+  }
+
+  setTabletopNote(id, note) {
+    const entry = this.tabletopSetup(id);
+    if (!entry) return null;
+    entry.note = String(note || '').slice(0, 240);
+    this.save();
+    return entry;
+  }
+
+  /** @returns {{id:string, ms:number, at:number}|null} the recorded attempt */
+  addTabletopTime(id, ms, { assisted = false } = {}) {
+    const entry = this.tabletopSetup(id);
+    if (!entry || !Number.isFinite(ms) || ms <= 0) return null;
+    const time = {
+      id: `t-${Date.now().toString(36)}-${entry.times.length}`,
+      ms: Math.round(ms),
+      at: Date.now(),
+      assisted: Boolean(assisted)
+    };
+    entry.times.push(time);
+    this.save();
+    return time;
+  }
+
+  removeTabletopTime(id, timeId) {
+    const entry = this.tabletopSetup(id);
+    if (!entry) return;
+    const before = entry.times.length;
+    entry.times = entry.times.filter((time) => time.id !== timeId);
+    if (entry.times.length !== before) this.save();
+  }
+
+  /** Headline numbers for the Stats screen. */
+  tabletopSummary() {
+    const setups = this.profile.tabletop;
+    let solved = 0;
+    let attempts = 0;
+    let bestMs = null;
+    for (const entry of setups) {
+      if (entry.times.length) solved += 1;
+      attempts += entry.times.length;
+      for (const time of entry.times) {
+        if (bestMs === null || time.ms < bestMs) bestMs = time.ms;
+      }
+    }
+    return { setups: setups.length, solved, attempts, bestMs };
+  }
 
   /* ------------------------------------------------------------- digests -- */
 
