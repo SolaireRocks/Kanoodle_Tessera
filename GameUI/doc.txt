@@ -1,0 +1,352 @@
+
+
+KANoodle Digital Game
+Product + Game Design Document
+Responsive Web &amp; Mobile • 2-D and 3-D • Solver-Assisted
+
+Supplied physical-game reference photo
+Version 1.0 • September 2026
+
+Contents
+1. Product Vision and Design Principles
+2. Source Rules and Digital Interpretation
+3. Core Gameplay Systems
+4. Game Modes
+5. Responsive Controls
+6. User Interface and Screen Flow
+7. Hint and Solve Systems
+8. Solver / Rules Engine Architecture
+9. Puzzle Content and Progression
+10. Data Model and Save State
+11. Accessibility, Feedback, and UX Polish
+12. Technical Architecture
+13. QA and Acceptance Criteria
+14. Implementation Roadmap
+15. Release and Rights Considerations
+Document purpose
+Define a production-ready digital adaptation that preserves the original spatial puzzle rules while adding responsive controls, accessible interaction, modern challenge modes, and an explicit Solve Puzzle feature.
+
+Key implementation target
+A player should be able to open the game, understand how to move a piece without instructions, complete a puzzle on either touch or mouse/keyboard, and reveal a valid solution in no more than two taps/clicks.
+
+1. Product Vision and Design Principles
+The digital game should feel like manipulating the physical pieces, but it should remove friction that only exists in the physical version: pieces getting lost, setup mistakes, hard-to-read diagrams, and uncertainty about whether a placement is legal.
+Primary goals
+Preserve the original “place the remaining pieces” spatial reasoning loop.
+Make piece selection, rotation, flipping, and placement obvious on touchscreens and desktops.
+Keep the board visually dominant; menus and utility actions must never crowd the puzzle.
+Support both a faithful Classic experience and replayable digital-only modes.
+Provide Undo, Hint, Reset, and Solve without making accidental solution reveals easy.
+Use one shared puzzle/rules engine for web and mobile so puzzle legality is identical everywhere.
+Design principles
+Principle
+Design consequence
+Direct manipulation
+Drag what you can see; when dragging is awkward, tap-select + tap-place must work equally well.
+Visible alternatives
+Rotation, flip, hint, and solve must have visible controls. Gestures may accelerate play but never be required.
+Fast error recovery
+Invalid placements return to the last legal position; Undo is always one action away.
+Assistance with integrity
+Hint and Solve are welcome, but Assisted clears are labeled so timed/competitive progression remains meaningful.
+Responsive parity
+The same puzzle must be comfortably playable at 360 px mobile widths and on large desktop displays.
+2. Source Rules and Digital Interpretation
+The supplied instruction booklet establishes the core rules: every puzzle uses all 12 unique lettered pieces; a challenge diagram pre-places some pieces; the player uses the remaining pieces to fill every empty space. It defines six 2-D difficulty levels, three 3-D pyramid levels, and quiz challenges for both forms.
+2-D source structure
+Level
+Starting setup
+Digital label
+1 - Pro
+11 locked / 1 remaining
+Easy; tutorial-friendly
+2 - Super Pro
+10 locked / 2 remaining
+Simple
+3 - Champ
+9 locked / 3 remaining
+Moderate
+4 - Whiz
+8 locked / 4 remaining
+Difficult
+5 - Expert
+7 locked / 5 remaining
+Very difficult
+6 - Genius
+6 locked / 6 remaining
+Advanced
+The 2-D board is represented digitally as a 5 x 11 grid of 55 sockets. Locked setup pieces cannot be moved during Classic play. Player pieces may be rotated and, where physically valid, flipped before placement.
+3-D source structure
+The 3-D game builds a complete 5-level pyramid. The booklet explicitly allows pieces to be stacked horizontally or vertically. Level 1 starts with 11 pieces placed, Level 2 with 10, and Level 3 with 9; the remaining pieces complete the pyramid.
+Implementation assumption to validate
+The 3-D target contains the same 55 beads as the full piece set. Before production content is locked, validate the digital lattice/orientation rules against several booklet diagrams and at least one physical build so every legal physical orientation is representable.
+
+Piece registry
+
+Figure 1. Piece IDs, colors, bead counts, and normalized 2-D silhouettes.
+Store every piece as immutable canonical coordinates plus generated orientation variants. Do not hard-code screen positions. A single PieceDefinition should feed rendering, collision, puzzle validation, hints, and the solver.
+
+3. Core Gameplay Systems
+3.1 Puzzle lifecycle
+Select a mode and puzzle.
+Load the starting setup; pre-placed pieces are locked.
+Player selects a remaining piece.
+Rotate / flip / orient it as needed.
+Place it onto a legal empty set of sockets.
+Repeat until all 55 sockets in the target are occupied.
+Validate completion, display clear feedback, record result, and offer Next Puzzle / Replay.
+3.2 Placement behavior
+Snap: while dragging, show a translucent ghost on the nearest legal anchor. Snap only when the full piece fits.
+Collision: overlapping a locked or placed piece shows red/striped conflict feedback; release returns the piece to its prior location.
+Bounds: portions outside the target are invalid and never snap.
+No ambiguous drops: if two anchors are equally close, retain the current anchor until the pointer clearly crosses the midpoint.
+Locked setup: Classic puzzles visually distinguish locked pieces with a subtle pin/lock badge or darker outline; locked pieces ignore drag input.
+Completion: run the same rules-engine validation used by the solver rather than trusting visual occupancy alone.
+3.3 Undo, Redo, Reset
+Undo/Redo operates on piece placements and orientation changes as one meaningful action per move. Reset returns the puzzle to its authored starting setup. On mobile, Undo remains in the sticky action dock; on desktop it is in the side panel and mapped to Ctrl/Cmd+Z.
+3.4 Save and resume
+Persist the puzzle ID, placed piece transforms, elapsed time, assistance flags, and move history after every legal move. A browser refresh or app resume should return to the exact prior state within one second.
+4. Game Modes
+Mode
+Definition
+Best for
+Tutorial
+Guided onboarding using low-difficulty 2-D setups. Teaches select, rotate, flip, place, Undo, Hint, and Solve.
+New players
+Classic 2-D
+Faithful 6-level progression plus 2-D Quiz. Locked pieces match authored challenge data.
+Core campaign
+Classic 3-D
+Faithful 3-level pyramid progression plus 3-D Quiz. Includes isometric and optional layer views.
+Advanced campaign
+Daily Noodle
+One deterministic challenge per day. Same seed for all players; can rotate between 2-D and 3-D.
+Retention / habit
+Time Attack
+Solve a short queue of puzzles before the clock expires. Solve is disabled for ranked runs; Hint adds a time penalty.
+Speed play
+Puzzle Rush
+Endless generated/curated puzzles that increase in remaining-piece count and branching difficulty.
+Replayability
+Zen / Free Play
+No timer, no score pressure, unlimited Undo/Hint/Solve. Resume anytime.
+Relaxed play
+Practice by Pieces
+Choose “1 remaining” through “6 remaining” regardless of campaign level.
+Skill training
+Puzzle Creator
+Place any subset as locked, ask the engine to verify solvability, then share a compact challenge code.
+Creative / social
+Solver Lab
+Recreate a physical or booklet setup and ask the engine for a next move or complete solution.
+Companion utility
+Recommended MVP modes
+Ship Tutorial, Classic 2-D, Classic 3-D, Zen / Free Play, and Solver Lab first. Add Daily, Time Attack, Puzzle Rush, and Puzzle Creator once the shared solver and telemetry are proven stable.
+
+5. Responsive Controls
+5.1 Universal interaction model
+Every essential action has a direct visible control. Dragging is the fastest path, while tap/click selection provides a reliable fallback for small screens, motor accessibility, trackpads, and precise 3-D placement.
+Action
+Desktop pointer
+Touch
+Keyboard
+Select piece
+Tap/click piece
+Tap piece
+Focus piece + Enter/Space
+Place
+Drag and release OR click empty anchor after selection
+Drag and release OR tap target anchor
+Arrow keys move ghost; Enter/Space drops
+Rotate 2-D
+Rotate button; mouse wheel only as optional shortcut
+Rotate button; optional two-finger twist
+R / Q / E
+Flip 2-D
+Flip button
+Flip button
+F
+Undo / Redo
+Visible buttons + Ctrl/Cmd+Z / Shift+Z
+Sticky Undo; Redo in overflow or when applicable
+Ctrl/Cmd+Z / Ctrl/Cmd+Shift+Z
+Hint
+Hint button
+Hint button
+H
+Solve
+Solve Puzzle button + confirmation
+Solve in sticky dock + confirmation
+S opens confirmation; Enter confirms
+3-D camera
+Drag empty space to orbit; wheel to zoom
+Drag empty space to orbit; pinch to zoom
+Arrow/Page keys or dedicated camera controls
+3-D orientation
+Orientation thumbnails + rotate/tilt controls
+Swipe orientation strip or tap Rotate/Tilt; grid via “Orientation”
+Q/E yaw, W/S pitch, A/D roll
+5.2 Mobile-specific rules
+Minimum touch target: 44 x 44 CSS px; primary action targets should be 48-56 px.
+Dragging a piece starts only when the gesture begins on the piece. Dragging empty board space is reserved for 3-D camera orbit.
+Auto-scroll is disabled while a piece is actively dragged. The page itself should not move during puzzle manipulation.
+The selected piece may temporarily magnify 10-15% and use a pointer-offset so the finger does not hide the target sockets.
+Never require long-press, double-tap, pinch, or device rotation for a core action.
+6. User Interface and Screen Flow
+6.1 Desktop layout
+
+Figure 2. Desktop gameplay layout.
+The board remains central and largest. Piece tray lives left, challenge/status utilities right, and selected-piece controls directly below the board. The Solve button is visually distinct but separated from normal move controls to avoid accidental use.
+6.2 Mobile layout
+
+Figure 3. Mobile gameplay layout with sticky action dock.
+6.3 Screen flow
+Navigation rule
+Home → Mode Select → Level/Puzzle Select → Gameplay → Completion → Next / Replay / Mode Select.  Settings, Help, and Accessibility are available from Home and the pause menu.  Resume appears on Home whenever an unfinished puzzle exists.
+
+7. Hint and Solve Systems
+7.1 Hint ladder
+Hint 1 - Highlight a piece that can be placed next without revealing location.
+Hint 2 - Show the recommended orientation for that piece.
+Hint 3 - Show a pulsing ghost placement for that piece.
+Full Solve - Fill every remaining piece using a valid solution path.
+Hints are generated from the current legal state, not from a pre-authored “next move,” so they continue to work after any valid player path. This also lets the game support generated puzzles and Solver Lab.
+7.2 Solve button behavior
+Button label is always explicit: “Solve Puzzle,” not an ambiguous magic-wand icon by itself.
+First activation opens a confirmation sheet: “Reveal a complete solution? This attempt will be marked Assisted.” Buttons: Cancel / Solve.
+If the current state is solvable, animate the remaining pieces one at a time. The player can pause, step forward/back, or replay the solution.
+If the current state is not solvable, identify the minimum recent conflicting move when practical; offer Undo Conflict or Reset to Start and Solve.
+Using Solve stops competitive timing and excludes the run from ranked Time Attack / Daily leaderboards, but still records the puzzle as Viewed/Solved with Assistance.
+Accessibility: the solve result is also announced as text (for example, “Solution shown. Six pieces placed.”).
+
+Figure 4. Solve and recovery flow.
+8. Solver / Rules Engine Architecture
+8.1 2-D solver
+Model the puzzle as an exact-cover problem. Each candidate row represents one legal placement of one piece orientation at one anchor. Columns represent (a) every target board socket and (b) one “use this piece exactly once” constraint per remaining piece. Algorithm X / Dancing Links or a well-pruned recursive exact-cover implementation is appropriate and deterministic.
+2-D candidate generation
+Normalize each canonical piece coordinate set.
+Generate all unique 90° rotations and mirrored variants that correspond to physically valid flips.
+Translate each orientation across the 5 x 11 board.
+Discard placements that exceed bounds or collide with locked/current pieces.
+Cache candidate lists by puzzle state signature where useful.
+8.2 3-D solver
+Use the same exact-cover abstraction but generate legal placements within the 5-level pyramid lattice. Each piece has a canonical 3-D embedding and a set of unique rigid rotations. The target-space model must match the physical sphere packing used by the puzzle. Keep 3-D placement generation as a separate module behind the same Solver interface.
+8.3 Solver API contract
+Method
+Purpose
+validate(state)
+Returns legal/illegal plus conflict reasons.
+findOneSolution(state)
+Returns one complete placement list or null.
+countSolutions(state, limit)
+Counts up to a cap (e.g., 2) for uniqueness checks.
+recommendMove(state)
+Returns one placement chosen using a stable heuristic.
+generatePuzzle(difficulty, seed)
+Creates a solvable setup and optionally verifies uniqueness.
+encodeChallenge(state)
+Creates a compact shareable puzzle code.
+Performance target
+On a mid-range phone, Hint should respond in under 250 ms for typical 2-D states and under 750 ms for typical 3-D states. Full Solve should show progress feedback if it exceeds 500 ms.
+
+9. Puzzle Content and Progression
+9.1 Classic content
+The supplied booklet visually contains 12 puzzles in each of the six standard 2-D levels (72), four 2-D quiz puzzles, six puzzles in each of the three standard 3-D levels (18), and seven 3-D quiz puzzles - 101 challenge diagrams total. Content should be entered as data, validated by the solver, and regression-tested against the reference setup images.
+9.2 Progression
+Unlock the next Classic level after completing at least one puzzle in the current level, while still allowing users to browse ahead if a “No locks” accessibility/preference option is enabled.
+A level badge tracks Unplayed, Solved, Solved with Hint, and Assisted/Solved via Solve.
+Completion stars can reward: 1 = solved, 2 = no Solve, 3 = no Hint and under par time. Avoid penalizing Zen mode.
+Daily and generated modes should derive difficulty from search branching / solution count, not only from number of missing pieces.
+9.3 Puzzle authoring tool
+Internal authoring should provide a board editor, locked-piece placement, instant solvability check, solution count, difficulty estimate, puzzle ID/version, and export to JSON. A “Validate all” command should reject impossible setups, illegal overlaps, duplicate piece use, or puzzles whose expected solution metadata no longer matches after a rules-engine change.
+10. Data Model and Save State
+PuzzleDefinition- id, mode, dimension (2D|3D), level, order- lockedPlacements[]- allowedAssist (bool)- sourceRef / contentVersionPieceDefinition- id (A-L), color, canonicalCells[]- unique2DOrientations[]- unique3DOrientations[]GameState- puzzleId, placedTransforms{}- moveHistory[], elapsedMs- hintCount, solveUsed, completed- rulesVersion, updatedAt
+Challenge codes should encode only canonical puzzle data and a rules/version identifier. Never encode screen pixels, camera state, or implementation-specific object IDs.
+11. Accessibility, Feedback, and UX Polish
+Area
+Requirement
+Color independence
+Letters A-L remain visible on pieces in accessibility mode; use shape + ID, not color alone. Add high-contrast outlines.
+Screen reader
+Expose board position, selected piece, orientation, legal/illegal placement, remaining piece count, completion, hint, and solve status through semantic live regions.
+Reduced motion
+Disable piece fly-ins, camera easing, celebration bursts, and solver animation; place results instantly.
+Motor accessibility
+Tap-select/tap-place path, large targets, no timed drag requirements, keyboard operation, configurable drag offset.
+Color vision
+Provide alternate palette and pattern overlays. Never communicate locked/conflict/valid state solely via red/green.
+Audio / haptics
+Soft snap, invalid buzz, completion cue; all independently toggleable. Haptics should be subtle and optional.
+Text scaling
+UI must tolerate 200% browser text zoom without hiding puzzle actions; board may scale independently.
+12. Technical Architecture
+Recommended client structure
+Rules Core - pure deterministic TypeScript module with no DOM/rendering dependencies.
+Solver Worker - Web Worker on web; background worker/thread abstraction on native wrapper if needed. Prevents UI stalls.
+2-D Renderer - Canvas/WebGL/SVG layer depending framework; hit-testing uses logical cells, not pixel collision.
+3-D Renderer - WebGL scene (for example, Three.js-style architecture) with instanced spheres, raycasting, and selectable orientation previews.
+UI Shell - responsive component system for menus, mode selection, timer, action dock, dialogs, accessibility.
+Persistence - local-first save (IndexedDB/local storage abstraction) with optional account cloud sync later.
+Content - versioned JSON puzzle packs loaded independently from engine releases.
+Cross-platform strategy
+Prefer a responsive Progressive Web App as the first implementation because the same codebase covers desktop and mobile browsers, supports install-to-home-screen, and can run the solver locally. If app-store distribution is required later, wrap the web client with a thin native container rather than forking puzzle logic.
+Rendering rules
+All positions originate in logical board coordinates; render transforms are derived from viewport size.
+Use 60 fps interaction targets, but correctness is independent of frame rate.
+Use instancing/batching for 3-D beads; the puzzle is small, so visual quality can be high without heavy GPU load.
+Keep solver and animation state separate. Solver returns a placement plan; UI decides how quickly to animate it.
+13. QA and Acceptance Criteria
+Test area
+Release acceptance
+Rules correctness
+Every authored puzzle loads without overlap; solver finds at least one valid completion; complete boards are recognized exactly once.
+2-D input
+All 12 pieces can be selected, rotated, flipped, dragged, tap-placed, undone, and reset at 360 px and 1440 px widths.
+3-D input
+Camera and piece controls never fight for the same gesture; every authored reference setup can be recreated.
+Solve
+From any solvable legal state, Solve reveals a valid complete board; from an unsolvable legal state, user gets recovery options rather than a dead end.
+Persistence
+Refresh/close/reopen preserves legal state, timer, assistance flags, and puzzle ID.
+Accessibility
+Core play is possible by keyboard alone and without color discrimination; reduced-motion mode avoids nonessential animation.
+Performance
+No visible input lag during drag; hint/solve stay within target latency or show a progress indicator.
+Responsive
+No essential action is offscreen or covered by browser UI in portrait mobile, landscape tablet, and desktop.
+14. Implementation Roadmap
+Phase
+Deliverables
+Phase 0 - Rules proof
+Encode A-L, 5x11 board, orientation generation, exact-cover 2-D solver, 10 reference puzzles, unit tests.
+Phase 1 - 2-D MVP
+Responsive UI, Tutorial, Classic 2-D, Zen, save/resume, Hint/Solve, keyboard/touch, accessibility baseline.
+Phase 2 - 3-D
+Pyramid lattice validation, 3-D renderer, orientation UI, Classic 3-D, 3-D Solver Lab.
+Phase 3 - Content + polish
+Ingest/validate full authorized puzzle library, completion tracking, audio/haptics, reduced motion, high-contrast modes.
+Phase 4 - Replay systems
+Daily challenge, Time Attack, Puzzle Rush, share codes, puzzle creator, optional leaderboards/accounts.
+MVP definition of done
+A new player can complete Tutorial and multiple Classic 2-D puzzles on a phone or desktop; all moves are validated; progress resumes after reload; and Hint/Solve always produce legal results. 3-D should not ship until physical-vs-digital orientation parity is verified.
+
+
+15. Release and Rights Considerations
+“Kanoodle,” the branded presentation, and the authored puzzle layouts belong to their respective rights holders. For a private prototype, this document can guide implementation from the supplied materials. Before public or commercial distribution, confirm permission to use the Kanoodle name, puzzle library, artwork, exact colors/trade dress, and any proprietary challenge content. The same engine can also support an original brand and newly generated puzzle set if needed.
+Reference materials used for this design
+User-supplied photograph of the physical game and its 12 colored pieces.
+User-supplied Kanoodle instruction booklet: rules, piece IDs, 2-D and 3-D difficulty structure, setup diagrams, and quiz structure.
+Source map used during design
+Reference
+Design information used
+Booklet p. 3
+12 unique lettered pieces; all pieces are used; 2-D and 3-D level counts.
+Booklet p. 4
+2-D level names/difficulty and locked-piece setup rule.
+Booklet pp. 5-14
+2-D play flow and the six standard challenge tiers.
+Booklet pp. 15-17
+2-D quiz transition; 3-D stacking/orientation concept; 5-level pyramid instructions.
+Booklet pp. 18-22
+3-D standard levels and final 3-D quiz.
+This document intentionally separates source-derived gameplay rules from digital-only additions such as Daily Challenge, Time Attack, Puzzle Rush, Puzzle Creator, responsive controls, persistence, and the solver UX.

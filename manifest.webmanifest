@@ -1,0 +1,19 @@
+{
+  "name": "Tessera — Polysphere Circuit",
+  "short_name": "Tessera",
+  "description": "Fifty-five sockets. Twelve pieces. One clock.",
+  "start_url": "./index.html#/home",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#08090B",
+  "theme_color": "#08090B",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

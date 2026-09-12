@@ -1,0 +1,18 @@
+{
+  "name": "tessera",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tessera — a polysphere puzzle game (2-D board + 3-D pyramid) with a solver-backed hint and solve system.",
+  "type": "module",
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "dev": "node tools/serve.mjs",
+    "content": "node tools/generate-content.mjs",
+    "census": "node tools/solution-census.mjs",
+    "test": "node --test tools/engine.test.mjs",
+    "test:browser": "node tools/browser.test.mjs"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^23.11.1"
+  }
+}

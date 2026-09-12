@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#0a0b0d; color:#F2F4F7; font-family:'Space Grotesk',Helvetica,sans-serif; }
+  a { color:#00E5A0; text-decoration:none; }
+  a:hover { color:#5CFFC8; }
+  * { box-sizing:border-box; }
+</style>
+</helmet>
+
+<section style="padding:64px 72px 120px; display:flex; flex-direction:column; gap:56px; background:#0a0b0d;">
+
+  <div id="1a" style="display:flex; align-items:flex-end; gap:28px; border-bottom:1px solid rgba(255,255,255,0.09); padding-bottom:28px; flex-wrap:wrap;">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.18em; color:#00E5A0; border:1px solid rgba(0,229,160,0.4); padding:5px 10px; border-radius:4px;">1A</div>
+    <div>
+      <div style="font-size:15px; font-family:'JetBrains Mono',monospace; letter-spacing:0.24em; color:#7B838E; text-transform:uppercase; margin-bottom:10px;">Polysphere puzzle · UI redesign</div>
+      <div style="font-size:58px; font-weight:700; letter-spacing:-0.03em; line-height:0.95;">TESSERA</div>
+    </div>
+    <div style="max-width:540px; font-size:16px; line-height:1.6; color:#9AA1AB; padding-bottom:6px; text-wrap:pretty;">Renamed and rebuilt for competitive solvers: one dark arena surface, a single mint accent, mono telemetry, and the board always the largest thing on screen. Eight mobile screens, six desktop screens.</div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:22px;">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:13px; letter-spacing:0.22em; color:#00E5A0;">MOBILE — 390 × 844</div>
+    <div style="display:flex; gap:36px; flex-wrap:wrap; align-items:flex-start;">
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#6B727C;">01 · SPLASH</div>
+        <div data-screen-label="M-01 Splash" style="width:390px; height:844px; background:#08090B; border:1px solid rgba(255,255,255,0.1); border-radius:34px; overflow:hidden; position:relative; display:flex; flex-direction:column;">
+          <div style="position:absolute; inset:0; display:grid; grid-template-columns:repeat(11,1fr); grid-template-rows:repeat(24,1fr); padding:24px; gap:7px;">
+            <sc-for list="{{ splashDots }}" as="d" hint-placeholder-count="120">
+              <div style="width:100%; height:100%; border-radius:50%; background:{{ d.bg }}"></div>
+            </sc-for>
+          </div>
+          <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(8,9,11,0.55) 0%, rgba(8,9,11,0.86) 18%, #08090B 30%, #08090B 92%, rgba(8,9,11,0.9) 100%);"></div>
+          <div style="position:relative; margin-top:auto; margin-bottom:auto; padding:0 34px; display:flex; flex-direction:column; gap:20px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div style="width:12px; height:12px; border-radius:50%; background:#00E5A0; box-shadow:0 0 18px rgba(0,229,160,0.9);"></div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.3em; color:#8A9099;">POLYSPHERE CIRCUIT</div>
+            </div>
+            <div style="font-size:78px; font-weight:700; letter-spacing:-0.05em; line-height:0.86;">TES<br>SERA</div>
+            <div style="font-size:19px; line-height:1.45; color:#9AA1AB; max-width:280px; text-wrap:pretty;">Fifty-five sockets. Twelve pieces. One clock.</div>
+          </div>
+          <div style="position:relative; padding:0 26px 42px; display:flex; flex-direction:column; gap:12px;">
+            <div style="height:56px; border-radius:14px; background:#00E5A0; color:#04120C; display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:600;">Start solving</div>
+            <div style="height:56px; border-radius:14px; border:1px solid rgba(255,255,255,0.16); display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:500; color:#DDE1E6;">Sign in</div>
+            <div style="text-align:center; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.2em; color:#5B626B; margin-top:8px;">V 1.0 · SEASON 3 OPENS IN 4D 02H</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#6B727C;">02 · HOME + RESUME</div>
+        <div data-screen-label="M-02 Home" style="width:390px; height:844px; background:#08090B; border:1px solid rgba(255,255,255,0.1); border-radius:34px; overflow:hidden; display:flex; flex-direction:column;">
+          <div style="padding:22px 22px 0; display:flex; align-items:center; justify-content:space-between;">
+            <div style="display:flex; align-items:center; gap:9px;">
+              <div style="width:9px; height:9px; border-radius:50%; background:#00E5A0;"></div>
+              <div style="font-size:19px; font-weight:700; letter-spacing:-0.02em;">TESSERA</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#00E5A0; letter-spacing:0.12em;">1418 ELO</div>
+              <div style="width:34px; height:34px; border-radius:50%; background:#1B1F26; border:1px solid rgba(255,255,255,0.12); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; color:#C6CCD4;">JS</div>
+            </div>
+          </div>
+
+          <div style="padding:20px 22px 0;">
+            <div style="border:1px solid rgba(0,229,160,0.32); background:linear-gradient(180deg,rgba(0,229,160,0.09),rgba(0,229,160,0.02)); border-radius:18px; padding:18px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.22em; color:#00E5A0;">RESUME · EXPERT 04</div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:20px; font-weight:700;">02:41</div>
+              </div>
+              <div style="display:flex; gap:5px; margin-bottom:16px;">
+                <sc-for list="{{ resumeBeads }}" as="b" hint-placeholder-count="11">
+                  <div style="height:22px; flex:1; border-radius:6px; background:{{ b.bg }}"></div>
+                </sc-for>
+              </div>
+              <div style="display:flex; gap:10px;">
+                <div style="flex:1; height:48px; border-radius:12px; background:#00E5A0; color:#04120C; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:600;">Resume</div>
+                <div style="width:112px; height:48px; border-radius:12px; border:1px solid rgba(255,255,255,0.16); display:flex; align-items:center; justify-content:center; font-size:15px; color:#DDE1E6;">Restart</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:20px 22px 0; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div style="background:#101216; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:15px;">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.18em; color:#7B838E; margin-bottom:8px;">STREAK</div>
+              <div style="font-size:30px; font-weight:700; letter-spacing:-0.02em;">17<span style="font-size:15px; color:#7B838E; font-weight:500;"> days</span></div>
+            </div>
+            <div style="background:#101216; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:15px;">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.18em; color:#7B838E; margin-bottom:8px;">BEST · GENIUS</div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:30px; font-weight:700; letter-spacing:-0.02em;">4:08</div>
+            </div>
+          </div>
+
+          <div style="padding:20px 22px 0; display:flex; flex-direction:column; gap:11px;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.22em; color:#7B838E;">TODAY</div>
+            <sc-for list="{{ todayRows }}" as="t" hint-placeholder-count="2">
+              <div style="background:#101216; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:15px; display:flex; align-items:center; gap:14px; min-height:76px;">
+                <div style="width:46px; height:46px; border-radius:12px; background:{{ t.chipBg }}; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-size:15px; font-weight:700; color:{{ t.chipFg }}">{{ t.tag }}</div>
+                <div style="flex:1;">
+                  <div style="font-size:17px; font-weight:600;">{{ t.name }}</div>
+                  <div style="font-size:14px; color:#7B838E;">{{ t.sub }}</div>
+                </div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.14em; color:#00E5A0;">{{ t.cta }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="margin-top:auto; border-top:1px solid rgba(255,255,255,0.08); background:#0C0E11; padding:12px 18px 26px; display:flex;">
+            <sc-for list="{{ mobileNav }}" as="n" hint-placeholder-count="4">
+              <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:7px; min-height:52px; justify-content:center;">
+                <div style="width:22px; height:22px; border-radius:7px; background:{{ n.bg }}"></div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.12em; color:{{ n.fg }}">{{ n.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#6B727C;">03 · MODE SELECT</div>
+        <div data-screen-label="M-03 Modes" style="width:390px; height:844px; background:#08090B; border:1px solid rgba(255,255,255,0.1); border-radius:34px; overflow:hidden; display:flex; flex-direction:column;">
+          <div style="padding:26px 22px 18px; border-bottom:1px solid rgba(255,255,255,0.08);">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.22em; color:#7B838E; margin-bottom:8px;">CHOOSE A MODE</div>
+            <div style="font-size:34px; font-weight:700; letter-spacing:-0.03em;">Modes</div>
+          </div>
+          <div style="padding:18px 22px; display:flex; flex-direction:column; gap:11px;">
+            <sc-for list="{{ modes }}" as="m" hint-placeholder-count="6">
+              <div style="border:1px solid rgba(255,255,255,0.09); background:#101216; border-radius:16px; padding:15px 16px; display:flex; align-items:center; gap:14px; min-height:78px;">
+                <div style="width:40px; height:40px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; background:{{ m.chipBg }}; color:{{ m.chipFg }}">{{ m.tag }}</div>
+                <div style="flex:1;">
+                  <div style="font-size:17px; font-weight:600; margin-bottom:3px;">{{ m.name }}</div>
+                  <div style="font-size:13px; color:#7B838E; line-height:1.35;">{{ m.desc }}</div>
+                </div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.12em; color:{{ m.metaFg }}">{{ m.meta }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#6B727C;">04 · LEVEL SELECT</div>
+        <div data-screen-label="M-04 Levels" style="width:390px; height:844px; background:#08090B; border:1px solid rgba(255,255,255,0.1); border-radius:34px; overflow:hidden; display:flex; flex-direction:column;">
+          <div style="padding:26px 22px 16px;">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+              <div style="width:36px; height:36px; border-radius:10px; border:1px solid rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; color:#C6CCD4; font-size:16px;">‹</div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; color:#7B838E;">CLASSIC 2-D</div>
+            </div>
+            <div style="font-size:34px; font-weight:700; letter-spacing:-0.03em; margin-bottom:6px;">Expert</div>
+            <div style="font-size:15px; color:#7B838E;">8 of 12 solved · par 5:30</div>
+          </div>
+          <div style="padding:0 22px 16px; display:flex; gap:7px;">
+            <sc-for list="{{ tiers }}" as="t" hint-placeholder-count="6">
+              <div style="flex:1; height:58px; border-radius:12px; border:1px solid {{ t.line }}; background:{{ t.bg }}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;">
+                <div style="font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:700; color:{{ t.fg }}">{{ t.n }}</div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.08em; color:{{ t.sub }}">{{ t.name }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="padding:6px 22px 0; display:grid; grid-template-columns:repeat(3,1fr); gap:11px;">
+            <sc-for list="{{ puzzles }}" as="p" hint-placeholder-count="12">
+              <div style="aspect-ratio:1; border-radius:15px; border:1px solid {{ p.line }}; background:{{ p.bg }}; padding:11px; display:flex; flex-direction:column; justify-content:space-between;">
+                <div style="font-family:'JetBrains Mono',monospace; font-size:15px; font-weight:700; color:{{ p.numFg }}">{{ p.n }}</div>
+                <div>
+                  <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:{{ p.timeFg }}; margin-bottom:5px;">{{ p.time }}</div>
+                  <div style="display:flex; gap:3px;">
+                    <sc-for list="{{ p.stars }}" as="s" hint-placeholder-count="3">
+                      <div style="width:7px; height:7px; border-radius:50%; background:{{ s.bg }}"></div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:auto; padding:18px 22px 28px; border-top:1px solid rgba(255,255,255,0.08); background:#0C0E11;">
+            <div style="height:56px; border-radius:14px; background:#00E5A0; color:#04120C; display:flex; align-items:center; justify-content:center; gap:10px; font-size:17px; font-weight:600;">Play Expert 09 <span style="font-family:'JetBrains Mono',monospace; font-size:11px; opacity:0.6;">NEXT UNSOLVED</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#6B727C;">05 · 2-D GAMEPLAY</div>
+        <div data-screen-label="M-05 Play 2D" style="width:390px; height:844px; background:#08090B; border:1px solid rgba(255,255,255,0.1); border-radius:34px; overflow:hidden; display:flex; flex-direction:column;">
+          <div style="padding:22px 20px 14px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.08);">
+            <div style="width:36px; height:36px; border-radius:10px; border:1px solid rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; color:#C6CCD4; font-size:15px;">‹</div>
+            <div style="text-align:center;">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.22em; color:#7B838E; margin-bottom:2px;">EXPERT · PUZZLE 09</div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:26px; font-weight:700; letter-spacing:-0.01em;">03:12</div>
+            </div>
+            <div style="width:36px; height:36px; border-radius:10px; border:1px solid rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; color:#C6CCD4; font-size:13px;">II</div>
+          </div>
+
+          <div style="padding:12px 20px 0; display:flex; align-items:center; gap:10px;">
+            <div style="flex:1; height:4px; border-radius:2px; background:rgba(255,255,255,0.09); overflow:hidden;">
+              <div style="width:58%; height:100%; background:#00E5A0;"></div>
+            </div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#7B838E; letter-spacing:0.1em;">32/55</div>
+          </div>
+
+          <div style="padding:20px 12px; display:flex; justify-content:center;">
+            <div style="background:#0E1014; border:1px solid rgba(255,255,255,0.08); border-radius:18px; padding:12px;">
+              <div style="display:grid; grid-template-columns:repeat(11,27px); grid-template-rows:repeat(5,27px); gap:3px;">
+                <sc-for list="{{ cells }}" as="c" hint-placeholder-count="55">
+                  <div style="width:100%; height:100%; border-radius:50%; background:{{ c.bg }}; box-shadow:{{ c.shadow }}; border:{{ c.border }}"></div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:0 20px; display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.2em; color:#7B838E;">REMAINING · 4</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.14em; color:#00E5A0;">DRAG TO PLACE</div>
+          </div>
+          <div style="padding:0 20px; display:flex; gap:10px;">
+            <sc-for list="{{ trayPieces }}" as="p" hint-placeholder-count="4">
+              <div style="flex:1; aspect-ratio:1; border-radius:14px; border:1px solid {{ p.line }}; background:{{ p.bg }}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px;">
+                <div style="display:grid; grid-template-columns:repeat(3,11px); grid-template-rows:repeat(3,11px); gap:2px;">
+                  <sc-for list="{{ p.grid }}" as="g" hint-placeholder-count="9">
+                    <div style="width:100%; height:100%; border-radius:50%; background:{{ g.bg }}"></div>
+                  </sc-for>
+                </div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.08em; color:{{ p.labelFg }}">{{ p.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="margin-top:auto; background:#0C0E11; border-top:1px solid rgba(255,255,255,0.08); padding:14px 16px 26px;">
+            <div style="display:flex; gap:8px; margin-bottom:10px;">
+              <sc-for list="{{ dockControls }}" as="d" hint-placeholder-count="4">
+                <div style="flex:1; height:54px; border-radius:13px; border:1px solid rgba(255,255,255,0.14); background:#14171C; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;">
+                  <div style="font-size:16px; color:#E6EAEF;">{{ d.icon }}</div>
+                  <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; color:#8A9099;">{{ d.label }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <div style="flex:1; height:50px; border-radius:13px; background:rgba(0,229,160,0.12); border:1px solid rgba(0,229,160,0.35); display:flex; align-items:center; justify-content:center; gap:8px; color:#00E5A0; font-size:16px; font-weight:600;">Hint <span style="font-family:'JetBrains Mono',monospace; font-size:11px; opacity:0.7;">+0:15</span></div>
+              <div style="width:136px; height:50px; border-radius:13px; border:1px dashed rgba(255,255,255,0.22); display:flex; align-items:center; justify-content:center; font-size:15px; color:#9AA1AB;">Solve puzzle</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#6B727C;">06 · 3-D PYRAMID</div>
+        <div data-screen-label="M-06 Play 3D" style="width:390px; height:844px; background:#08090B; border:1px solid rgba(255,255,255,0.1); border-radius:34px; overflow:hidden; display:flex; flex-direction:column;">
+          <div style="padding:22px 20px 14px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.08);">
+            <div style="width:36px; height:36px; border-radius:10px; border:1px solid rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; color:#C6CCD4; font-size:15px;">‹</div>
+            <div style="text-align:center;">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.22em; color:#7B838E; margin-bottom:2px;">PYRAMID · LEVEL 3</div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:26px; font-weight:700;">06:47</div>
+            </div>
+            <div style="width:36px; height:36px; border-radius:10px; border:1px solid rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; color:#C6CCD4; font-size:13px;">II</div>
+          </div>
+
+          <div style="height:340px; position:relative; display:flex; align-items:center; justify-content:center; background:radial-gradient(60% 50% at 50% 48%, rgba(0,229,160,0.07), rgba(8,9,11,0) 70%);">
+            <div style="perspective:1000px; width:320px; height:320px; display:flex; align-items:center; justify-content:center;">
+              <div style="transform:rotateX(58deg) rotateZ(-38deg); transform-style:preserve-3d; position:relative; width:0px; height:0px;">
+                <sc-for list="{{ pyrM }}" as="L" hint-placeholder-count="5">
+                  <div style="position:absolute; display:grid; gap:4px; grid-template-columns:{{ L.tpl }}; transform:{{ L.tf }}; transform-style:preserve-3d;">
+                    <sc-for list="{{ L.cells }}" as="c" hint-placeholder-count="25">
+                      <div style="width:26px; height:26px; border-radius:50%; background:{{ c.bg }}; box-shadow:{{ c.shadow }}; border:{{ c.border }}"></div>
+                    </sc-for>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="position:absolute; left:18px; top:14px; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.16em; color:#5B626B;">DRAG TO ORBIT · PINCH TO ZOOM</div>
+          </div>
+
+          <div style="padding:4px 20px 0; display:flex; gap:7px;">
+            <sc-for list="{{ layerTabs }}" as="t" hint-placeholder-count="5">
+              <div style="flex:1; height:48px; border-radius:12px; border:1px solid {{ t.line }}; background:{{ t.bg }}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;">
+                <div style="font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700; color:{{ t.fg }}">{{ t.n }}</div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:8px; color:{{ t.sub }}">{{ t.state }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="padding:18px 20px 0;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.2em; color:#7B838E; margin-bottom:10px;">ORIENTATION · PIECE J</div>
+            <div style="display:flex; gap:8px;">
+              <sc-for list="{{ orientations }}" as="o" hint-placeholder-count="5">
+                <div style="flex:1; aspect-ratio:1; border-radius:12px; border:1px solid {{ o.line }}; background:{{ o.bg }}; display:flex; align-items:center; justify-content:center;">
+                  <div style="width:24px; height:24px; border-radius:6px; background:{{ o.swatch }}; transform:{{ o.tf }}"></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="margin-top:auto; background:#0C0E11; border-top:1px solid rgba(255,255,255,0.08); padding:14px 16px 26px; display:flex; gap:8px;">
+            <sc-for list="{{ dock3d }}" as="d" hint-placeholder-count="5">
+              <div style="flex:1; height:54px; border-radius:13px; border:1px solid {{ d.line }}; background:{{ d.bg }}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;">
+                <div style="font-size:15px; color:{{ d.fg }}">{{ d.icon }}</div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.08em; color:{{ d.sub }}">{{ d.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#6B727C;">07 · COMPLETION</div>
+        <div data-screen-label="M-07 Complete" style="width:390px; height:844px; background:#08090B; border:1px solid rgba(255,255,255,0.1); border-radius:34px; overflow:hidden; display:flex; flex-direction:column;">
+          <div style="padding:44px 24px 0; text-align:center;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.3em; color:#00E5A0; margin-bottom:16px;">SOLVED · CLEAN RUN</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:74px; font-weight:700; letter-spacing:-0.045em; line-height:1;">4:31</div>
+            <div style="font-size:16px; color:#7B838E; margin-top:10px;">59s under par · new personal best</div>
+          </div>
+          <div style="padding:26px 20px 0; display:flex; justify-content:center;">
+            <div style="background:#0E1014; border:1px solid rgba(0,229,160,0.22); border-radius:16px; padding:11px;">
+              <div style="display:grid; grid-template-columns:repeat(11,22px); grid-template-rows:repeat(5,22px); gap:3px;">
+                <sc-for list="{{ solvedCells }}" as="c" hint-placeholder-count="55">
+                  <div style="width:100%; height:100%; border-radius:50%; background:{{ c.bg }}; box-shadow:{{ c.shadow }}"></div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          <div style="padding:26px 22px 0; display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+            <sc-for list="{{ resultStats }}" as="s" hint-placeholder-count="3">
+              <div style="background:#101216; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:13px;">
+                <div style="font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.16em; color:#7B838E; margin-bottom:7px;">{{ s.label }}</div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:20px; font-weight:700; color:{{ s.fg }}">{{ s.value }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="padding:20px 22px 0;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.2em; color:#7B838E; margin-bottom:10px;">EXPERT 09 · TODAY</div>
+            <div style="background:#101216; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:6px 4px;">
+              <sc-for list="{{ leaderboard }}" as="r" hint-placeholder-count="4">
+                <div style="display:flex; align-items:center; gap:12px; padding:11px 13px; border-radius:12px; background:{{ r.bg }}">
+                  <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:{{ r.rankFg }}; width:24px;">{{ r.rank }}</div>
+                  <div style="flex:1; font-size:15px; font-weight:500; color:{{ r.nameFg }}">{{ r.name }}</div>
+                  <div style="font-family:'JetBrains Mono',monospace; font-size:13px; color:{{ r.timeFg }}">{{ r.time }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="margin-top:auto; padding:18px 20px 28px; display:flex; gap:10px;">
+            <div style="width:100px; height:56px; border-radius:14px; border:1px solid rgba(255,255,255,0.16); display:flex; align-items:center; justify-content:center; font-size:16px; color:#DDE1E6;">Replay</div>
+            <div style="flex:1; height:56px; border-radius:14px; background:#00E5A0; color:#04120C; display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:600;">Next puzzle</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#6B727C;">08 · SETTINGS / ACCESSIBILITY</div>
+        <div data-screen-label="M-08 Settings" style="width:390px; height:844px; background:#08090B; border:1px solid rgba(255,255,255,0.1); border-radius:34px; overflow:hidden; display:flex; flex-direction:column;">
+          <div style="padding:26px 22px 18px; border-bottom:1px solid rgba(255,255,255,0.08);">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.22em; color:#7B838E; margin-bottom:8px;">SETTINGS</div>
+            <div style="font-size:34px; font-weight:700; letter-spacing:-0.03em;">Accessibility</div>
+          </div>
+          <div style="padding:18px 22px; display:flex; flex-direction:column; gap:20px;">
+            <sc-for list="{{ settingGroups }}" as="g" hint-placeholder-count="2">
+              <div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.2em; color:#00E5A0; margin-bottom:11px;">{{ g.title }}</div>
+                <div style="background:#101216; border:1px solid rgba(255,255,255,0.08); border-radius:16px; overflow:hidden;">
+                  <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="3">
+                    <div style="padding:15px 16px; display:flex; align-items:center; gap:14px; border-bottom:{{ r.divider }}; min-height:64px;">
+                      <div style="flex:1;">
+                        <div style="font-size:16px; font-weight:500; margin-bottom:3px;">{{ r.label }}</div>
+                        <div style="font-size:13px; color:#7B838E; line-height:1.3;">{{ r.hint }}</div>
+                      </div>
+                      <div style="width:50px; height:30px; border-radius:15px; padding:3px; background:{{ r.trackBg }}; display:flex; justify-content:{{ r.knobPos }};">
+                        <div style="width:24px; height:24px; border-radius:50%; background:{{ r.knobBg }}"></div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+            <div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.2em; color:#00E5A0; margin-bottom:11px;">PIECE PALETTE</div>
+              <div style="display:flex; gap:9px;">
+                <sc-for list="{{ palettes }}" as="p" hint-placeholder-count="3">
+                  <div style="flex:1; border:1px solid {{ p.line }}; background:{{ p.bg }}; border-radius:14px; padding:12px; display:flex; flex-direction:column; gap:10px;">
+                    <div style="display:flex; gap:3px;">
+                      <sc-for list="{{ p.swatches }}" as="s" hint-placeholder-count="4">
+                        <div style="flex:1; height:16px; border-radius:4px; background:{{ s.bg }}"></div>
+                      </sc-for>
+                    </div>
+                    <div style="font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.1em; color:{{ p.fg }}">{{ p.name }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:22px;">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:13px; letter-spacing:0.22em; color:#00E5A0;">DESKTOP — 1440 × 900</div>
+    <div style="display:flex; gap:44px; flex-wrap:wrap; align-items:flex-start;">
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#6B727C;">D1 · TITLE / SPLASH</div>
+        <div data-screen-label="D-01 Splash" style="width:1440px; height:900px; background:#08090B; border:1px solid rgba(255,255,255,0.1); border-radius:14px; overflow:hidden; position:relative; display:flex;">
+          <div style="position:absolute; inset:0; display:grid; grid-template-columns:repeat(26,1fr); grid-template-rows:repeat(16,1fr); padding:40px; gap:12px;">
+            <sc-for list="{{ splashDotsD }}" as="d" hint-placeholder-count="200">
+              <div style="width:100%; height:100%; border-radius:50%; background:{{ d.bg }}"></div>
+            </sc-for>
+          </div>
+          <div style="position:absolute; inset:0; background:linear-gradient(100deg, #08090B 46%, rgba(8,9,11,0.72) 74%, rgba(8,9,11,0.94) 100%);"></div>
+          <div style="position:absolute; left:0; right:0; top:0; height:150px; background:linear-gradient(180deg, #08090B 0%, #08090B 62%, rgba(8,9,11,0) 100%);"></div>
+          <div style="position:absolute; left:0; right:0; bottom:0; height:130px; background:linear-gradient(0deg, #08090B 0%, rgba(8,9,11,0) 100%);"></div>
+          <div style="position:relative; padding:52px 80px; display:flex; flex-direction:column; width:100%;">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <div style="width:11px; height:11px; border-radius:50%; background:#00E5A0; box-shadow:0 0 16px rgba(0,229,160,0.85);"></div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.3em; color:#8A9099;">POLYSPHERE CIRCUIT</div>
+              </div>
+              <div style="display:flex; gap:34px; font-size:15px; color:#8A9099;">
+                <div>Leaderboards</div>
+                <div>Season 3</div>
+                <div>How to play</div>
+                <div style="color:#F2F4F7;">Sign in</div>
+              </div>
+            </div>
+            <div style="margin-top:auto; margin-bottom:auto; max-width:740px;">
+              <div style="font-size:172px; font-weight:700; letter-spacing:-0.055em; line-height:0.84; margin-bottom:26px;">TESSERA</div>
+              <div style="font-size:27px; line-height:1.4; color:#AEB5BE; max-width:560px; text-wrap:pretty; margin-bottom:40px;">Fifty-five sockets. Twelve pieces. One clock. The polysphere puzzle, rebuilt for players who race it.</div>
+              <div style="display:flex; gap:14px; align-items:center;">
+                <div style="height:62px; padding:0 36px; border-radius:14px; background:#00E5A0; color:#04120C; display:flex; align-items:center; font-size:18px; font-weight:600;">Start solving</div>
+                <div style="height:62px; padding:0 30px; border-radius:14px; border:1px solid rgba(255,255,255,0.18); display:flex; align-items:center; font-size:18px; color:#DDE1E6;">Watch a 30-second solve</div>
+              </div>
+            </div>
+            <div style="display:flex; gap:56px; font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.16em; color:#5B626B;">
+              <div>101 CHALLENGES</div>
+              <div>2-D + 3-D</div>
+              <div>DAILY LATTICE 06:00 UTC</div>
+              <div>V 1.0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#6B727C;">D2 · HOME + MODES</div>
+        <div data-screen-label="D-02 Home" style="width:1440px; height:900px; background:#08090B; border:1px solid rgba(255,255,255,0.1); border-radius:14px; overflow:hidden; display:flex; flex-direction:column;">
+          <div style="height:68px; border-bottom:1px solid rgba(255,255,255,0.08); padding:0 32px; display:flex; align-items:center; justify-content:space-between; background:#0C0E11;">
+            <div style="display:flex; align-items:center; gap:38px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div style="width:10px; height:10px; border-radius:50%; background:#00E5A0;"></div>
+                <div style="font-size:19px; font-weight:700; letter-spacing:-0.02em;">TESSERA</div>
+              </div>
+              <div style="display:flex; gap:26px; font-size:15px;">
+                <div style="color:#F2F4F7;">Play</div>
+                <div style="color:#7B838E;">Leaderboards</div>
+                <div style="color:#7B838E;">Stats</div>
+                <div style="color:#7B838E;">Solver Lab</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:18px;">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#00E5A0; letter-spacing:0.12em;">1418 ELO · DIAMOND II</div>
+              <div style="width:34px; height:34px; border-radius:50%; background:#1B1F26; border:1px solid rgba(255,255,255,0.12); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; color:#C6CCD4;">JS</div>
+            </div>
+          </div>
+          <div style="flex:1; display:grid; grid-template-columns:1fr 400px;">
+            <div style="padding:36px 32px; display:flex; flex-direction:column; gap:28px;">
+              <div style="border:1px solid rgba(0,229,160,0.3); background:linear-gradient(115deg,rgba(0,229,160,0.1),rgba(0,229,160,0.015)); border-radius:20px; padding:28px 30px; display:flex; align-items:center; gap:34px;">
+                <div style="flex:1;">
+                  <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.24em; color:#00E5A0; margin-bottom:12px;">RESUME · EXPERT 04</div>
+                  <div style="font-size:38px; font-weight:700; letter-spacing:-0.03em; margin-bottom:8px;">Pick up where you stopped</div>
+                  <div style="font-size:16px; color:#9AA1AB;">32 of 55 sockets · elapsed 02:41 · par 5:30</div>
+                </div>
+                <div style="display:grid; grid-template-columns:repeat(11,17px); grid-template-rows:repeat(5,17px); gap:3px;">
+                  <sc-for list="{{ cells }}" as="c" hint-placeholder-count="55">
+                    <div style="width:100%; height:100%; border-radius:50%; background:{{ c.bg }}; box-shadow:{{ c.shadow }}"></div>
+                  </sc-for>
+                </div>
+                <div style="height:56px; padding:0 30px; border-radius:14px; background:#00E5A0; color:#04120C; display:flex; align-items:center; font-size:17px; font-weight:600;">Resume</div>
+              </div>
+              <div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.22em; color:#7B838E; margin-bottom:14px;">MODES</div>
+                <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px;">
+                  <sc-for list="{{ modes }}" as="m" hint-placeholder-count="6">
+                    <div style="border:1px solid rgba(255,255,255,0.09); background:#101216; border-radius:18px; padding:20px; display:flex; flex-direction:column; gap:16px; min-height:150px;">
+                      <div style="display:flex; align-items:center; justify-content:space-between;">
+                        <div style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; background:{{ m.chipBg }}; color:{{ m.chipFg }}">{{ m.tag }}</div>
+                        <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.12em; color:{{ m.metaFg }}">{{ m.meta }}</div>
+                      </div>
+                      <div>
+                        <div style="font-size:19px; font-weight:600; margin-bottom:6px;">{{ m.name }}</div>
+                        <div style="font-size:14px; color:#7B838E; line-height:1.45;">{{ m.desc }}</div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+            <div style="border-left:1px solid rgba(255,255,255,0.08); background:#0C0E11; padding:36px 28px; display:flex; flex-direction:column; gap:26px;">
+              <div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.22em; color:#7B838E; margin-bottom:14px;">THIS WEEK</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                  <sc-for list="{{ weekStats }}" as="s" hint-placeholder-count="4">
+                    <div style="background:#101216; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px;">
+                      <div style="font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.16em; color:#7B838E; margin-bottom:9px;">{{ s.label }}</div>
+                      <div style="font-family:'JetBrains Mono',monospace; font-size:26px; font-weight:700; color:{{ s.fg }}">{{ s.value }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.22em; color:#7B838E; margin-bottom:14px;">DAILY LATTICE · TOP TIMES</div>
+                <div style="background:#101216; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:6px 4px;">
+                  <sc-for list="{{ leaderboard }}" as="r" hint-placeholder-count="4">
+                    <div style="display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:12px; background:{{ r.bg }}">
+                      <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:{{ r.rankFg }}; width:26px;">{{ r.rank }}</div>
+                      <div style="flex:1; font-size:15px; font-weight:500; color:{{ r.nameFg }}">{{ r.name }}</div>
+                      <div style="font-family:'JetBrains Mono',monospace; font-size:13px; color:{{ r.timeFg }}">{{ r.time }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="margin-top:auto; border:1px solid rgba(255,255,255,0.09); border-radius:16px; padding:22px;">
+                <div style="font-size:17px; font-weight:600; margin-bottom:8px;">Solver Lab</div>
+                <div style="font-size:14px; color:#7B838E; line-height:1.5;">Recreate a physical board and ask the engine for the next legal move.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#6B727C;">D3 · LEVEL SELECT</div>
+        <div data-screen-label="D-03 Levels" style="width:1440px; height:900px; background:#08090B; border:1px solid rgba(255,255,255,0.1); border-radius:14px; overflow:hidden; display:flex; flex-direction:column;">
+          <div style="height:68px; border-bottom:1px solid rgba(255,255,255,0.08); padding:0 32px; display:flex; align-items:center; gap:20px; background:#0C0E11;">
+            <div style="width:34px; height:34px; border-radius:10px; border:1px solid rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; color:#C6CCD4;">‹</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.2em; color:#7B838E;">CLASSIC 2-D / EXPERT</div>
+          </div>
+          <div style="flex:1; display:grid; grid-template-columns:320px 1fr;">
+            <div style="border-right:1px solid rgba(255,255,255,0.08); background:#0C0E11; padding:30px 22px; display:flex; flex-direction:column; gap:9px;">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; color:#7B838E; margin-bottom:8px;">TIERS</div>
+              <sc-for list="{{ tierRows }}" as="t" hint-placeholder-count="7">
+                <div style="border:1px solid {{ t.line }}; background:{{ t.bg }}; border-radius:14px; padding:14px 16px; display:flex; align-items:center; gap:14px; min-height:68px;">
+                  <div style="font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; color:{{ t.fg }}">{{ t.n }}</div>
+                  <div style="flex:1;">
+                    <div style="font-size:16px; font-weight:600; color:{{ t.nameFg }}">{{ t.name }}</div>
+                    <div style="font-size:13px; color:#7B838E;">{{ t.sub }}</div>
+                  </div>
+                  <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:{{ t.progFg }}">{{ t.prog }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="padding:34px 36px; display:flex; flex-direction:column; gap:26px;">
+              <div style="display:flex; align-items:flex-end; justify-content:space-between;">
+                <div>
+                  <div style="font-size:46px; font-weight:700; letter-spacing:-0.035em; margin-bottom:8px;">Expert</div>
+                  <div style="font-size:16px; color:#9AA1AB;">8 of 12 solved · par 5:30 · best 4:31</div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                  <div style="height:50px; padding:0 20px; border-radius:12px; border:1px solid rgba(255,255,255,0.16); display:flex; align-items:center; font-size:15px; color:#DDE1E6;">Sort: fastest</div>
+                  <div style="height:50px; padding:0 24px; border-radius:12px; background:#00E5A0; color:#04120C; display:flex; align-items:center; font-size:16px; font-weight:600;">Play next unsolved</div>
+                </div>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:14px;">
+                <sc-for list="{{ puzzles }}" as="p" hint-placeholder-count="12">
+                  <div style="aspect-ratio:0.95; border-radius:16px; border:1px solid {{ p.line }}; background:{{ p.bg }}; padding:16px; display:flex; flex-direction:column; justify-content:space-between;">
+                    <div style="font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:700; color:{{ p.numFg }}">{{ p.n }}</div>
+                    <div>
+                      <div style="font-family:'JetBrains Mono',monospace; font-size:13px; color:{{ p.timeFg }}; margin-bottom:8px;">{{ p.time }}</div>
+                      <div style="display:flex; gap:4px;">
+                        <sc-for list="{{ p.stars }}" as="s" hint-placeholder-count="3">
+                          <div style="width:9px; height:9px; border-radius:50%; background:{{ s.bg }}"></div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#6B727C;">D4 · 2-D GAMEPLAY</div>
+        <div data-screen-label="D-04 Play 2D" style="width:1440px; height:900px; background:#08090B; border:1px solid rgba(255,255,255,0.1); border-radius:14px; overflow:hidden; display:flex; flex-direction:column;">
+          <div style="height:68px; border-bottom:1px solid rgba(255,255,255,0.08); padding:0 28px; display:flex; align-items:center; justify-content:space-between; background:#0C0E11;">
+            <div style="display:flex; align-items:center; gap:20px;">
+              <div style="width:34px; height:34px; border-radius:10px; border:1px solid rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; color:#C6CCD4;">‹</div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.2em; color:#7B838E;">CLASSIC 2-D · EXPERT · PUZZLE 09</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:26px;">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#7B838E;">PAR 5:30</div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:32px; font-weight:700; letter-spacing:-0.01em;">03:12</div>
+              <div style="height:38px; padding:0 16px; border-radius:10px; border:1px solid rgba(255,255,255,0.14); display:flex; align-items:center; font-size:14px; color:#C6CCD4;">Pause</div>
+            </div>
+          </div>
+          <div style="flex:1; display:grid; grid-template-columns:280px 1fr 310px;">
+            <div style="border-right:1px solid rgba(255,255,255,0.08); background:#0C0E11; padding:26px 22px; display:flex; flex-direction:column; gap:16px;">
+              <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; color:#7B838E;">PIECE TRAY</div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#00E5A0;">4 LEFT</div>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <sc-for list="{{ trayPieces }}" as="p" hint-placeholder-count="4">
+                  <div style="aspect-ratio:1; border-radius:16px; border:1px solid {{ p.line }}; background:{{ p.bg }}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;">
+                    <div style="display:grid; grid-template-columns:repeat(3,15px); grid-template-rows:repeat(3,15px); gap:3px;">
+                      <sc-for list="{{ p.grid }}" as="g" hint-placeholder-count="9">
+                        <div style="width:100%; height:100%; border-radius:50%; background:{{ g.bg }}"></div>
+                      </sc-for>
+                    </div>
+                    <div style="font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.1em; color:{{ p.labelFg }}">{{ p.label }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="margin-top:14px; border-top:1px solid rgba(255,255,255,0.08); padding-top:20px;">
+                <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; color:#7B838E; margin-bottom:12px;">SELECTED · PIECE J</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:9px;">
+                  <sc-for list="{{ selectedControls }}" as="c" hint-placeholder-count="4">
+                    <div style="height:54px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:#14171C; display:flex; align-items:center; justify-content:center; gap:8px;">
+                      <div style="font-size:15px; color:#E6EAEF;">{{ c.icon }}</div>
+                      <div style="font-size:14px; color:#C6CCD4;">{{ c.label }}</div>
+                      <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#5B626B;">{{ c.key }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:28px; background:radial-gradient(55% 50% at 50% 45%, rgba(0,229,160,0.055), rgba(8,9,11,0) 70%);">
+              <div style="background:#0E1014; border:1px solid rgba(255,255,255,0.08); border-radius:24px; padding:22px;">
+                <div style="display:grid; grid-template-columns:repeat(11,50px); grid-template-rows:repeat(5,50px); gap:6px;">
+                  <sc-for list="{{ cells }}" as="c" hint-placeholder-count="55">
+                    <div style="width:100%; height:100%; border-radius:50%; background:{{ c.bg }}; box-shadow:{{ c.shadow }}; border:{{ c.border }}"></div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:16px; width:660px;">
+                <div style="flex:1; height:5px; border-radius:3px; background:rgba(255,255,255,0.09); overflow:hidden;">
+                  <div style="width:58%; height:100%; background:#00E5A0;"></div>
+                </div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#7B838E; letter-spacing:0.12em;">32 / 55 SOCKETS</div>
+              </div>
+            </div>
+
+            <div style="border-left:1px solid rgba(255,255,255,0.08); background:#0C0E11; padding:26px 22px; display:flex; flex-direction:column; gap:22px;">
+              <div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; color:#7B838E; margin-bottom:12px;">RUN</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                  <sc-for list="{{ runStats }}" as="s" hint-placeholder-count="4">
+                    <div style="background:#101216; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:14px;">
+                      <div style="font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.16em; color:#7B838E; margin-bottom:8px;">{{ s.label }}</div>
+                      <div style="font-family:'JetBrains Mono',monospace; font-size:21px; font-weight:700; color:{{ s.fg }}">{{ s.value }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; color:#7B838E; margin-bottom:12px;">MOVES</div>
+                <div style="background:#101216; border:1px solid rgba(255,255,255,0.08); border-radius:14px; overflow:hidden;">
+                  <sc-for list="{{ moveLog }}" as="m" hint-placeholder-count="5">
+                    <div style="padding:12px 14px; display:flex; align-items:center; gap:11px; border-bottom:{{ m.divider }}">
+                      <div style="width:10px; height:10px; border-radius:50%; background:{{ m.dot }}"></div>
+                      <div style="flex:1; font-family:'JetBrains Mono',monospace; font-size:12px; color:#C6CCD4;">{{ m.text }}</div>
+                      <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#5B626B;">{{ m.t }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="margin-top:auto; display:flex; flex-direction:column; gap:10px;">
+                <div style="display:flex; gap:10px;">
+                  <div style="flex:1; height:50px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:#14171C; display:flex; align-items:center; justify-content:center; gap:8px; font-size:15px; color:#DDE1E6;">Undo <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#5B626B;">⌘Z</span></div>
+                  <div style="flex:1; height:50px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:#14171C; display:flex; align-items:center; justify-content:center; font-size:15px; color:#DDE1E6;">Reset</div>
+                </div>
+                <div style="height:50px; border-radius:12px; background:rgba(0,229,160,0.12); border:1px solid rgba(0,229,160,0.35); display:flex; align-items:center; justify-content:center; gap:9px; color:#00E5A0; font-size:16px; font-weight:600;">Hint <span style="font-family:'JetBrains Mono',monospace; font-size:11px; opacity:0.7;">H · +0:15</span></div>
+                <div style="height:50px; border-radius:12px; border:1px dashed rgba(255,255,255,0.22); display:flex; align-items:center; justify-content:center; font-size:15px; color:#9AA1AB;">Solve puzzle</div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:9px; line-height:1.6; color:#5B626B; letter-spacing:0.06em;">SOLVING MARKS THIS RUN ASSISTED AND VOIDS THE RANKED TIME.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#6B727C;">D5 · 3-D PYRAMID</div>
+        <div data-screen-label="D-05 Play 3D" style="width:1440px; height:900px; background:#08090B; border:1px solid rgba(255,255,255,0.1); border-radius:14px; overflow:hidden; display:flex; flex-direction:column;">
+          <div style="height:68px; border-bottom:1px solid rgba(255,255,255,0.08); padding:0 28px; display:flex; align-items:center; justify-content:space-between; background:#0C0E11;">
+            <div style="display:flex; align-items:center; gap:20px;">
+              <div style="width:34px; height:34px; border-radius:10px; border:1px solid rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; color:#C6CCD4;">‹</div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.2em; color:#7B838E;">PYRAMID · LEVEL 3</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:26px;">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#7B838E;">PAR 9:00</div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:32px; font-weight:700;">06:47</div>
+              <div style="height:38px; padding:0 16px; border-radius:10px; border:1px solid rgba(255,255,255,0.14); display:flex; align-items:center; font-size:14px; color:#C6CCD4;">Pause</div>
+            </div>
+          </div>
+          <div style="flex:1; display:grid; grid-template-columns:280px 1fr 310px;">
+            <div style="border-right:1px solid rgba(255,255,255,0.08); background:#0C0E11; padding:26px 22px; display:flex; flex-direction:column; gap:24px;">
+              <div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; color:#7B838E; margin-bottom:12px;">LAYERS</div>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                  <sc-for list="{{ layerRows }}" as="l" hint-placeholder-count="5">
+                    <div style="border:1px solid {{ l.line }}; background:{{ l.bg }}; border-radius:12px; padding:12px 14px; display:flex; align-items:center; gap:12px; min-height:58px;">
+                      <div style="font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:700; color:{{ l.fg }}">L{{ l.n }}</div>
+                      <div style="flex:1; font-size:14px; color:{{ l.textFg }}">{{ l.size }}</div>
+                      <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:{{ l.stateFg }}">{{ l.state }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; color:#7B838E; margin-bottom:12px;">REMAINING</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:11px;">
+                  <sc-for list="{{ trayPieces }}" as="p" hint-placeholder-count="4">
+                    <div style="aspect-ratio:1; border-radius:14px; border:1px solid {{ p.line }}; background:{{ p.bg }}; display:flex; align-items:center; justify-content:center;">
+                      <div style="display:grid; grid-template-columns:repeat(3,13px); grid-template-rows:repeat(3,13px); gap:3px;">
+                        <sc-for list="{{ p.grid }}" as="g" hint-placeholder-count="9">
+                          <div style="width:100%; height:100%; border-radius:50%; background:{{ g.bg }}"></div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+
+            <div style="position:relative; display:flex; align-items:center; justify-content:center; background:radial-gradient(50% 45% at 50% 45%, rgba(0,229,160,0.06), rgba(8,9,11,0) 72%);">
+              <div style="perspective:1600px; width:620px; height:620px; display:flex; align-items:center; justify-content:center;">
+                <div style="transform:rotateX(56deg) rotateZ(-38deg); transform-style:preserve-3d; position:relative; width:0px; height:0px;">
+                  <sc-for list="{{ pyrD }}" as="L" hint-placeholder-count="5">
+                    <div style="position:absolute; display:grid; gap:7px; grid-template-columns:{{ L.tpl }}; transform:{{ L.tf }}; transform-style:preserve-3d;">
+                      <sc-for list="{{ L.cells }}" as="c" hint-placeholder-count="25">
+                        <div style="width:52px; height:52px; border-radius:50%; background:{{ c.bg }}; box-shadow:{{ c.shadow }}; border:{{ c.border }}"></div>
+                      </sc-for>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="position:absolute; left:24px; top:20px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#5B626B; line-height:1.9;">DRAG EMPTY SPACE TO ORBIT<br>SCROLL TO ZOOM · Q/E YAW · W/S PITCH</div>
+              <div style="position:absolute; right:24px; bottom:24px; display:flex; gap:9px;">
+                <sc-for list="{{ camControls }}" as="c" hint-placeholder-count="4">
+                  <div style="width:46px; height:46px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:#14171C; display:flex; align-items:center; justify-content:center; font-size:15px; color:#C6CCD4;">{{ c.icon }}</div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="border-left:1px solid rgba(255,255,255,0.08); background:#0C0E11; padding:26px 22px; display:flex; flex-direction:column; gap:22px;">
+              <div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; color:#7B838E; margin-bottom:12px;">ORIENTATION · PIECE J</div>
+                <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:9px;">
+                  <sc-for list="{{ orientationsD }}" as="o" hint-placeholder-count="6">
+                    <div style="aspect-ratio:1; border-radius:12px; border:1px solid {{ o.line }}; background:{{ o.bg }}; display:flex; align-items:center; justify-content:center;">
+                      <div style="width:30px; height:30px; border-radius:7px; background:{{ o.swatch }}; transform:{{ o.tf }}"></div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; color:#7B838E; margin-bottom:12px;">BEADS PLACED</div>
+                <div style="background:#101216; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px;">
+                  <div style="display:flex; align-items:flex-end; gap:10px; margin-bottom:12px;">
+                    <div style="font-family:'JetBrains Mono',monospace; font-size:34px; font-weight:700;">41</div>
+                    <div style="font-family:'JetBrains Mono',monospace; font-size:14px; color:#7B838E; padding-bottom:7px;">/ 55</div>
+                  </div>
+                  <div style="height:5px; border-radius:3px; background:rgba(255,255,255,0.09); overflow:hidden;">
+                    <div style="width:75%; height:100%; background:#00E5A0;"></div>
+                  </div>
+                </div>
+              </div>
+              <div style="margin-top:auto; display:flex; flex-direction:column; gap:10px;">
+                <div style="display:flex; gap:10px;">
+                  <div style="flex:1; height:50px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:#14171C; display:flex; align-items:center; justify-content:center; font-size:15px; color:#DDE1E6;">Undo</div>
+                  <div style="flex:1; height:50px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:#14171C; display:flex; align-items:center; justify-content:center; font-size:15px; color:#DDE1E6;">Reset</div>
+                </div>
+                <div style="height:50px; border-radius:12px; background:rgba(0,229,160,0.12); border:1px solid rgba(0,229,160,0.35); display:flex; align-items:center; justify-content:center; gap:9px; color:#00E5A0; font-size:16px; font-weight:600;">Hint <span style="font-family:'JetBrains Mono',monospace; font-size:11px; opacity:0.7;">H · +0:15</span></div>
+                <div style="height:50px; border-radius:12px; border:1px dashed rgba(255,255,255,0.22); display:flex; align-items:center; justify-content:center; font-size:15px; color:#9AA1AB;">Solve pyramid</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#6B727C;">D6 · COMPLETION</div>
+        <div data-screen-label="D-06 Complete" style="width:1440px; height:900px; background:#08090B; border:1px solid rgba(255,255,255,0.1); border-radius:14px; overflow:hidden; display:flex;">
+          <div style="flex:1; padding:64px 60px; display:flex; flex-direction:column;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.3em; color:#00E5A0; margin-bottom:24px;">SOLVED · CLEAN RUN · NO ASSISTANCE</div>
+            <div style="display:flex; align-items:flex-end; gap:24px; margin-bottom:16px;">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:136px; font-weight:700; letter-spacing:-0.05em; line-height:0.84;">4:31</div>
+              <div style="padding-bottom:18px; display:flex; flex-direction:column; gap:6px;">
+                <div style="font-family:'JetBrains Mono',monospace; font-size:16px; color:#00E5A0; letter-spacing:0.1em;">−0:59 VS PAR</div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:16px; color:#7B838E; letter-spacing:0.1em;">−0:12 VS YOUR BEST</div>
+              </div>
+            </div>
+            <div style="font-size:22px; color:#AEB5BE; margin-bottom:44px;">Expert 09 · new personal best · Diamond II → Diamond I in 3 solves</div>
+            <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:28px; max-width:640px;">
+              <sc-for list="{{ resultDetail }}" as="s" hint-placeholder-count="4">
+                <div style="background:#101216; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:18px;">
+                  <div style="font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.18em; color:#7B838E; margin-bottom:10px;">{{ s.label }}</div>
+                  <div style="font-family:'JetBrains Mono',monospace; font-size:26px; font-weight:700; color:{{ s.fg }}">{{ s.value }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="max-width:640px; background:#101216; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:22px 24px;">
+              <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px;">
+                <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.2em; color:#7B838E;">RANK PROGRESS · DIAMOND II</div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#00E5A0;">1418 / 1450</div>
+              </div>
+              <div style="height:6px; border-radius:3px; background:rgba(255,255,255,0.09); overflow:hidden; margin-bottom:12px;">
+                <div style="width:78%; height:100%; background:#00E5A0;"></div>
+              </div>
+              <div style="font-size:15px; color:#7B838E;">Three more clean solves at this pace promotes you to Diamond I.</div>
+            </div>
+            <div style="margin-top:auto; padding-top:32px; display:flex; gap:12px;">
+              <div style="height:60px; padding:0 34px; border-radius:14px; background:#00E5A0; color:#04120C; display:flex; align-items:center; font-size:17px; font-weight:600;">Next puzzle</div>
+              <div style="height:60px; padding:0 28px; border-radius:14px; border:1px solid rgba(255,255,255,0.16); display:flex; align-items:center; font-size:16px; color:#DDE1E6;">Watch replay</div>
+              <div style="height:60px; padding:0 28px; border-radius:14px; border:1px solid rgba(255,255,255,0.16); display:flex; align-items:center; font-size:16px; color:#DDE1E6;">Share time</div>
+            </div>
+          </div>
+          <div style="width:620px; border-left:1px solid rgba(255,255,255,0.08); background:#0C0E11; padding:56px 48px; display:flex; flex-direction:column; gap:34px;">
+            <div style="display:flex; justify-content:center;">
+              <div style="background:#0E1014; border:1px solid rgba(0,229,160,0.22); border-radius:20px; padding:18px;">
+                <div style="display:grid; grid-template-columns:repeat(11,38px); grid-template-rows:repeat(5,38px); gap:5px;">
+                  <sc-for list="{{ solvedCells }}" as="c" hint-placeholder-count="55">
+                    <div style="width:100%; height:100%; border-radius:50%; background:{{ c.bg }}; box-shadow:{{ c.shadow }}"></div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.22em; color:#7B838E; margin-bottom:14px;">EXPERT 09 · TODAY'S FASTEST</div>
+              <div style="background:#101216; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:6px 4px;">
+                <sc-for list="{{ leaderboard }}" as="r" hint-placeholder-count="4">
+                  <div style="display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:12px; background:{{ r.bg }}">
+                    <div style="font-family:'JetBrains Mono',monospace; font-size:13px; color:{{ r.rankFg }}; width:28px;">{{ r.rank }}</div>
+                    <div style="flex:1; font-size:16px; font-weight:500; color:{{ r.nameFg }}">{{ r.name }}</div>
+                    <div style="font-family:'JetBrains Mono',monospace; font-size:14px; color:{{ r.timeFg }}">{{ r.time }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#00E5A0&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#00E5A0&quot;,&quot;#FF3B30&quot;,&quot;#5B8CFF&quot;,&quot;#F5C542&quot;],&quot;section&quot;:&quot;Theme&quot;}}">
+const P = { A:'#FF4D6D', B:'#FF8A3D', C:'#FFD23F', D:'#8FD94B', E:'#29C7A6',
+            F:'#35A7FF', G:'#7B6CFF', H:'#C86BFF', I:'#FF6FB5', J:'#B7E85A',
+            K:'#E6E1D6', L:'#8A97A8' };
+const EMPTY_BG = 'rgba(255,255,255,0.055)';
+
+function bead(ch) {
+  if (!ch || ch === '.') return { bg: EMPTY_BG, shadow: 'inset 0 1px 2px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.05)' };
+  const c = P[ch];
+  return { bg: c, shadow: 'inset 0 -3px 6px rgba(0,0,0,0.32), 0 0 14px ' + c + '38', border: 'none' };
+}
+
+const BOARD_PARTIAL = ['AABBBCCC...','ADDBCCEE...','ADDFFEE....','AGGFF......','GGGH.......'];
+const BOARD_SOLVED  = ['AABBBCCCDDD','AAABBCCDDDF','EEAGGCHHDFF','EEGGGHHHFFF','EEEGIIIHJJJ'];
+
+function flat(rows) { return rows.join('').split('').map(bead); }
+
+function pyramid(cell, gap, lift, fills) {
+  const out = [];
+  for (let i = 0; i < 5; i++) {
+    const n = 5 - i, w = n * cell + (n - 1) * gap;
+    out.push({
+      tpl: 'repeat(' + n + ',' + cell + 'px)',
+      tf: 'translate(' + (-w / 2) + 'px,' + (-w / 2) + 'px) translateZ(' + (i * lift) + 'px)',
+      cells: Array.from({ length: n * n }, (_, k) => bead(fills[i] ? fills[i][k % fills[i].length] : '.'))
+    });
+  }
+  return out;
+}
+const PYR_FILL = ['AABBCCDDEEFFGGHHIIJJKKLLA', 'CCDDEEFFGGHHIIJJ', 'FF.GG.HH.', '..I.', '.'];
+
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#00E5A0';
+    const rand = (s) => { let x = Math.sin(s) * 10000; return x - Math.floor(x); };
+    const keys = Object.keys(P);
+
+    const dots = (count, density, seed) => Array.from({ length: count }, (_, i) => {
+      const r = rand(i * 3.71 + seed);
+      return { bg: r < density ? P[keys[Math.floor(rand(i * 7.13 + seed) * 12)]] : 'rgba(255,255,255,0.045)' };
+    });
+
+    const modes = [
+      { tag: '2D', name: 'Classic 2-D', desc: 'The 55-socket board. Twelve tiers, 101 challenges.', meta: '84 / 101', metaFg: '#7B838E', chipBg: 'rgba(0,229,160,0.14)', chipFg: accent },
+      { tag: '3D', name: 'Pyramid', desc: 'Stack the same twelve pieces into five layers.', meta: 'LV 3', metaFg: '#7B838E', chipBg: 'rgba(53,167,255,0.16)', chipFg: '#5CB8FF' },
+      { tag: 'TA', name: 'Time Attack', desc: 'Ranked. Fixed seed, no hints, no solver.', meta: 'RANKED', metaFg: '#FF6B85', chipBg: 'rgba(255,77,109,0.16)', chipFg: '#FF6B85' },
+      { tag: 'DL', name: 'Daily Lattice', desc: 'One shared puzzle. Resets 06:00 UTC.', meta: 'LIVE', metaFg: accent, chipBg: 'rgba(255,210,63,0.16)', chipFg: '#FFD23F' },
+      { tag: 'VS', name: 'Head to head', desc: 'Same board, split clock, first to fill wins.', meta: '2 ONLINE', metaFg: '#7B838E', chipBg: 'rgba(200,107,255,0.16)', chipFg: '#C86BFF' },
+      { tag: 'LB', name: 'Solver Lab', desc: 'Enter a physical board, get the next legal move.', meta: 'UNRANKED', metaFg: '#7B838E', chipBg: 'rgba(255,255,255,0.07)', chipFg: '#C6CCD4' }
+    ];
+
+    return {
+      accent,
+      splashDots: dots(264, 0.3, 1),
+      splashDotsD: dots(416, 0.26, 5),
+      resumeBeads: ['A','B','C','D','E','F','G','H','.', '.', '.'].map(c => ({ bg: c === '.' ? 'rgba(255,255,255,0.07)' : P[c] })),
+      todayRows: [
+        { tag: '04', name: 'Daily Lattice', sub: '3-D pyramid · 6 remaining', cta: 'PLAY', chipBg: 'rgba(0,229,160,0.14)', chipFg: accent },
+        { tag: '1:30', name: 'Time Attack', sub: 'Ranked · no solver', cta: 'ENTER', chipBg: 'rgba(255,77,109,0.14)', chipFg: '#FF6B85' }
+      ],
+      mobileNav: [
+        { label: 'PLAY', bg: accent, fg: accent },
+        { label: 'RANKS', bg: 'rgba(255,255,255,0.16)', fg: '#6B727C' },
+        { label: 'STATS', bg: 'rgba(255,255,255,0.16)', fg: '#6B727C' },
+        { label: 'YOU', bg: 'rgba(255,255,255,0.16)', fg: '#6B727C' }
+      ],
+      modes,
+      tiers: [
+        { n: '01', name: 'ROOKIE', done: true }, { n: '02', name: 'PRO', done: true },
+        { n: '03', name: 'ACE', done: true }, { n: '04', name: 'EXPERT', active: true },
+        { n: '05', name: 'MASTER', locked: true }, { n: '06', name: 'GENIUS', locked: true }
+      ].map(t => ({
+        n: t.n, name: t.name,
+        bg: t.active ? 'rgba(0,229,160,0.12)' : '#101216',
+        line: t.active ? 'rgba(0,229,160,0.45)' : 'rgba(255,255,255,0.08)',
+        fg: t.active ? accent : (t.locked ? '#4E555E' : '#C6CCD4'),
+        sub: t.active ? 'rgba(0,229,160,0.7)' : (t.locked ? '#3E444B' : '#6B727C')
+      })),
+      tierRows: [
+        { n: '01', name: 'Rookie', sub: 'par 1:20', prog: '12/12' },
+        { n: '02', name: 'Pro', sub: 'par 2:00', prog: '12/12' },
+        { n: '03', name: 'Ace', sub: 'par 3:40', prog: '12/12' },
+        { n: '04', name: 'Expert', sub: 'par 5:30', prog: '8/12', active: true },
+        { n: '05', name: 'Master', sub: 'locked', prog: '—', locked: true },
+        { n: '06', name: 'Genius', sub: 'locked', prog: '—', locked: true },
+        { n: '07', name: 'Circuit', sub: 'season 3 only', prog: '—', locked: true }
+      ].map(t => ({
+        n: t.n, name: t.name, sub: t.sub, prog: t.prog,
+        bg: t.active ? 'rgba(0,229,160,0.1)' : 'transparent',
+        line: t.active ? 'rgba(0,229,160,0.42)' : 'rgba(255,255,255,0.08)',
+        fg: t.active ? accent : (t.locked ? '#4E555E' : '#7B838E'),
+        nameFg: t.locked ? '#5B626B' : '#F2F4F7',
+        progFg: t.active ? accent : '#5B626B'
+      })),
+      puzzles: Array.from({ length: 12 }, (_, i) => {
+        const n = i + 1, solved = n <= 8, next = n === 9;
+        const stars = Array.from({ length: 3 }, (_, s) => ({
+          bg: solved && s < (n % 3 === 0 ? 3 : 2) ? (this.props.accent ?? '#00E5A0') : 'rgba(255,255,255,0.13)'
+        }));
+        return {
+          n: String(n).padStart(2, '0'),
+          bg: next ? 'rgba(0,229,160,0.11)' : (solved ? '#101216' : 'transparent'),
+          line: next ? 'rgba(0,229,160,0.45)' : 'rgba(255,255,255,0.08)',
+          numFg: next ? accent : (solved ? '#F2F4F7' : '#4E555E'),
+          time: solved ? ['5:12','4:48','6:03','5:29','4:31','5:55','6:41','5:07'][i] : (next ? 'NEXT' : 'LOCKED'),
+          timeFg: next ? accent : (solved ? '#7B838E' : '#3E444B'),
+          stars
+        };
+      }),
+      cells: flat(BOARD_PARTIAL),
+      solvedCells: flat(BOARD_SOLVED),
+      trayPieces: [
+        { label: 'PIECE I', color: 'I', shape: [0,1,1,0,1,0,0,1,0], sel: false },
+        { label: 'PIECE J', color: 'J', shape: [1,0,0,1,1,0,0,1,1], sel: true },
+        { label: 'PIECE K', color: 'K', shape: [1,1,1,0,1,0,0,1,0], sel: false },
+        { label: 'PIECE L', color: 'L', shape: [1,1,0,0,1,1,0,0,1], sel: false }
+      ].map(p => ({
+        label: p.label,
+        bg: p.sel ? 'rgba(0,229,160,0.1)' : '#101216',
+        line: p.sel ? 'rgba(0,229,160,0.45)' : 'rgba(255,255,255,0.09)',
+        labelFg: p.sel ? accent : '#6B727C',
+        grid: p.shape.map(v => ({ bg: v ? P[p.color] : 'rgba(255,255,255,0.05)' }))
+      })),
+      dockControls: [
+        { icon: '↺', label: 'ROTATE' }, { icon: '⇋', label: 'FLIP' },
+        { icon: '↶', label: 'UNDO' }, { icon: '⟲', label: 'RESET' }
+      ],
+      dock3d: [
+        { icon: '↺', label: 'ROTATE', bg: '#14171C', line: 'rgba(255,255,255,0.14)', fg: '#E6EAEF', sub: '#8A9099' },
+        { icon: '⇋', label: 'FLIP', bg: '#14171C', line: 'rgba(255,255,255,0.14)', fg: '#E6EAEF', sub: '#8A9099' },
+        { icon: '↶', label: 'UNDO', bg: '#14171C', line: 'rgba(255,255,255,0.14)', fg: '#E6EAEF', sub: '#8A9099' },
+        { icon: '◎', label: 'HINT', bg: 'rgba(0,229,160,0.12)', line: 'rgba(0,229,160,0.35)', fg: accent, sub: accent },
+        { icon: '⌂', label: 'RECENTER', bg: '#14171C', line: 'rgba(255,255,255,0.14)', fg: '#E6EAEF', sub: '#8A9099' }
+      ],
+      pyrM: pyramid(26, 4, 22, PYR_FILL),
+      pyrD: pyramid(52, 7, 44, PYR_FILL),
+      layerTabs: [
+        { n: 'L1', state: 'FULL', done: true }, { n: 'L2', state: 'FULL', done: true },
+        { n: 'L3', state: '6/9', active: true }, { n: 'L4', state: '0/4' }, { n: 'L5', state: '0/1' }
+      ].map(t => ({
+        n: t.n, state: t.state,
+        bg: t.active ? 'rgba(0,229,160,0.12)' : '#101216',
+        line: t.active ? 'rgba(0,229,160,0.45)' : 'rgba(255,255,255,0.08)',
+        fg: t.active ? accent : (t.done ? '#C6CCD4' : '#5B626B'),
+        sub: t.active ? 'rgba(0,229,160,0.7)' : '#5B626B'
+      })),
+      layerRows: [
+        { n: '1', size: '5 × 5 · 25 beads', state: 'FULL', done: true },
+        { n: '2', size: '4 × 4 · 16 beads', state: 'FULL', done: true },
+        { n: '3', size: '3 × 3 · 9 beads', state: '6 / 9', active: true },
+        { n: '4', size: '2 × 2 · 4 beads', state: '0 / 4' },
+        { n: '5', size: '1 × 1 · 1 bead', state: '0 / 1' }
+      ].map(l => ({
+        n: l.n, size: l.size, state: l.state,
+        bg: l.active ? 'rgba(0,229,160,0.1)' : 'transparent',
+        line: l.active ? 'rgba(0,229,160,0.42)' : 'rgba(255,255,255,0.08)',
+        fg: l.active ? accent : (l.done ? '#C6CCD4' : '#5B626B'),
+        textFg: l.done || l.active ? '#DDE1E6' : '#6B727C',
+        stateFg: l.active ? accent : '#5B626B'
+      })),
+      orientations: [0, 90, 180, 270, 45].map((deg, i) => ({
+        tf: 'rotate(' + deg + 'deg)',
+        swatch: i === 1 ? P.J : 'rgba(255,255,255,0.18)',
+        bg: i === 1 ? 'rgba(0,229,160,0.1)' : '#101216',
+        line: i === 1 ? 'rgba(0,229,160,0.45)' : 'rgba(255,255,255,0.08)'
+      })),
+      orientationsD: [0, 90, 180, 270, 45, 135].map((deg, i) => ({
+        tf: 'rotate(' + deg + 'deg)',
+        swatch: i === 1 ? P.J : 'rgba(255,255,255,0.18)',
+        bg: i === 1 ? 'rgba(0,229,160,0.1)' : '#101216',
+        line: i === 1 ? 'rgba(0,229,160,0.45)' : 'rgba(255,255,255,0.08)'
+      })),
+      camControls: [{ icon: '＋' }, { icon: '－' }, { icon: '⌂' }, { icon: '⛶' }],
+      resultStats: [
+        { label: 'MOVES', value: '38', fg: '#F2F4F7' },
+        { label: 'UNDOS', value: '2', fg: '#F2F4F7' },
+        { label: 'ELO', value: '+18', fg: accent }
+      ],
+      runStats: [
+        { label: 'MOVES', value: '24', fg: '#F2F4F7' },
+        { label: 'UNDOS', value: '2', fg: '#F2F4F7' },
+        { label: 'VS BEST', value: '−0:19', fg: accent },
+        { label: 'PACE', value: 'AHEAD', fg: accent }
+      ],
+      weekStats: [
+        { label: 'SOLVED', value: '31', fg: '#F2F4F7' },
+        { label: 'CLEAN RATE', value: '84%', fg: accent },
+        { label: 'AVG TIME', value: '5:02', fg: '#F2F4F7' },
+        { label: 'ELO Δ', value: '+64', fg: accent }
+      ],
+      resultDetail: [
+        { label: 'MOVES', value: '38', fg: '#F2F4F7' },
+        { label: 'UNDOS', value: '2', fg: '#F2F4F7' },
+        { label: 'HINTS', value: '0', fg: accent },
+        { label: 'ELO', value: '+18', fg: accent }
+      ],
+      leaderboard: [
+        { rank: '01', name: 'kx_orbit', time: '3:58', me: false },
+        { rank: '02', name: 'lattice.jp', time: '4:12', me: false },
+        { rank: '03', name: 'you', time: '4:31', me: true },
+        { rank: '04', name: 'nonogrammer', time: '4:44', me: false }
+      ].map(r => ({
+        rank: r.rank, name: r.name, time: r.time,
+        bg: r.me ? 'rgba(0,229,160,0.11)' : 'transparent',
+        rankFg: r.me ? accent : '#5B626B',
+        nameFg: r.me ? accent : '#DDE1E6',
+        timeFg: r.me ? accent : '#9AA1AB'
+      })),
+      moveLog: [
+        { text: 'PIECE H → R3 C6', t: '02:58' }, { text: 'PIECE G → R4 C1', t: '02:31' },
+        { text: 'UNDO', t: '02:14', warn: true }, { text: 'PIECE F → R2 C4', t: '01:52' },
+        { text: 'PIECE E → R1 C7', t: '01:20', last: true }
+      ].map((m, i, a) => ({
+        text: m.text, t: m.t,
+        dot: m.warn ? '#FF6B85' : accent,
+        divider: i === a.length - 1 ? 'none' : '1px solid rgba(255,255,255,0.06)'
+      })),
+      selectedControls: [
+        { icon: '↺', label: 'Rotate', key: 'R' }, { icon: '⇋', label: 'Flip', key: 'F' },
+        { icon: '↶', label: 'Undo', key: 'Z' }, { icon: '⟲', label: 'Reset', key: '⇧R' }
+      ],
+      settingGroups: [
+        { title: 'VISION', rows: [
+          { label: 'High-contrast beads', hint: 'Boost saturation and outline every socket', on: true },
+          { label: 'Colour-blind symbols', hint: 'Adds a unique glyph to each of the 12 pieces', on: true },
+          { label: 'Reduce motion', hint: 'No bead bounce or camera easing', on: false }
+        ]},
+        { title: 'PLAY', rows: [
+          { label: 'Snap to socket', hint: 'Pieces jump to the nearest legal position', on: true },
+          { label: 'Show timer during play', hint: 'Hide it if the clock puts you off', on: true },
+          { label: 'Haptics on placement', hint: 'Short tick when a piece locks in', on: false }
+        ]}
+      ].map(g => ({
+        title: g.title,
+        rows: g.rows.map((r, i, a) => ({
+          label: r.label, hint: r.hint,
+          divider: i === a.length - 1 ? 'none' : '1px solid rgba(255,255,255,0.06)',
+          trackBg: r.on ? accent : 'rgba(255,255,255,0.13)',
+          knobPos: r.on ? 'flex-end' : 'flex-start',
+          knobBg: r.on ? '#04120C' : '#8A9099'
+        }))
+      })),
+      palettes: [
+        { name: 'ARENA', colors: ['A','C','E','G'], sel: true },
+        { name: 'MUTED', colors: ['L','K','E','F'], sel: false },
+        { name: 'DEUTER', colors: ['C','F','K','L'], sel: false }
+      ].map(p => ({
+        name: p.name,
+        bg: p.sel ? 'rgba(0,229,160,0.1)' : '#101216',
+        line: p.sel ? 'rgba(0,229,160,0.45)' : 'rgba(255,255,255,0.08)',
+        fg: p.sel ? accent : '#6B727C',
+        swatches: p.colors.map(c => ({ bg: P[c] }))
+      }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>
