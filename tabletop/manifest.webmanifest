@@ -1,0 +1,18 @@
+{
+  "name": "Tessera Tabletop",
+  "short_name": "Tabletop",
+  "description": "Openings for a physical polysphere set, and a logbook for the times.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#08090B",
+  "theme_color": "#08090B",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -168,6 +168,11 @@ they live in their own logbook and never move the rating or the streak; the
 Stats screen shows them under their own heading, labelled as hand-entered. Each
 opening can also be played on screen (`#/play/setup?code=…`), on either surface.
 
+`tabletop/` is this mode on its own: a standalone static site with the same
+generator and sheet, plus a stopwatch and JSON/CSV export for the times, that
+deploys to GitHub Pages as it stands. It carries its own copy of the engine, so
+it does not depend on anything outside that folder. See `tabletop/README.md`.
+
 ### Assistance
 
 Hint is a three-step ladder — which piece, then its orientation, then a pulsing
