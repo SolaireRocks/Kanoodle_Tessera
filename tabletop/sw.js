@@ -11,7 +11,7 @@
  * load rather than the load after that.
  */
 
-const CACHE = 'tessera-tabletop-v1';
+const CACHE = 'tessera-tabletop-v2';
 
 const SHELL = [
   './',

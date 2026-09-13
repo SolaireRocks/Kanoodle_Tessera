@@ -1,9 +1,16 @@
 /* Tessera Tabletop — one page, three panels.
-   Phone is the base layer; the columns appear at 1080px. The component rules
-   are the tabletop half of the parent project's stylesheet, so a sheet printed
-   from here matches one printed from the full game. */
+   Phone is the base layer: the document itself scrolls, the header sticks to
+   the top, and the stopwatch docks to the bottom. The columns — each with its
+   own scroll — appear at 1080px. The component rules are the tabletop half of
+   the parent project's stylesheet, so a sheet printed from here matches one
+   printed from the full game. */
 
 /* ------------------------------------------------------------------ shell */
+
+:root {
+  --gutter: 16px;
+  --dock-h: 84px;
+}
 
 #app {
   min-height: 100dvh;
@@ -15,25 +22,58 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 0;
   background: var(--bg);
 }
 
-.scroll {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-
 .apphead {
-  padding: 18px 22px;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  padding: calc(10px + env(safe-area-inset-top)) var(--gutter) 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
   border-bottom: 1px solid var(--line);
+  background: rgba(8, 9, 11, 0.9);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   flex: none;
+}
+
+/* Only one of these is ever showing, decided by width alone. */
+@media (max-width: 1079px) {
+  .desk-only { display: none !important; }
+}
+@media (min-width: 1080px) {
+  .mobile-only { display: none !important; }
+}
+
+/* ------------------------------------------------------------ phone tabs */
+
+.tabs {
+  flex: 1;
+  max-width: 360px;
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--control);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+}
+.tabs__btn {
+  flex: 1;
+  min-height: 40px;
+  border-radius: 9px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--dim);
+  white-space: nowrap;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.tabs__btn.is-active { background: var(--accent-soft); color: var(--accent); }
+@media (min-width: 1080px) {
+  .tabs { display: none; }
 }
 
 .brand { display: flex; align-items: center; gap: 11px; }
@@ -129,8 +169,33 @@
 }
 .btn--dashed:hover:not(:disabled) { color: var(--text-2); border-color: rgba(255, 255, 255, 0.4); }
 
+.btn--danger {
+  background: var(--danger-soft);
+  border: 1px solid var(--danger-line);
+  color: var(--danger);
+}
+.btn--plain { color: var(--muted); font-weight: 500; }
+
+.btn--stop { background: var(--danger); color: #1a0508; }
+
+.btn--block { width: 100%; justify-content: space-between; }
+.btn--grow { flex: 1; min-width: 0; }
+.btn--square { width: 56px; padding: 0; flex: none; font-size: 22px; }
+
 .btn--xs { min-height: 38px; padding: 0 16px; font-size: 14px; font-weight: 500; }
+.btn--xs.btn--square { width: 42px; font-size: 17px; }
 .btn .kbd { font-family: var(--mono); font-size: 11px; opacity: 0.7; font-weight: 400; }
+
+/* Play and stop, drawn rather than typed so every platform renders the same. */
+.glyph { display: inline-block; flex: none; }
+.glyph--play {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 7px 0 7px 12px;
+  border-color: transparent transparent transparent currentColor;
+}
+.glyph--stop { width: 13px; height: 13px; border-radius: 2px; background: currentColor; }
 
 .iconbtn {
   width: 36px;
@@ -145,6 +210,10 @@
   flex: none;
 }
 .iconbtn:hover { border-color: rgba(255, 255, 255, 0.3); }
+.iconbtn--lg { width: 44px; height: 44px; font-size: 22px; }
+@media (max-width: 1079px) {
+  .apphead .iconbtn { width: 44px; height: 44px; font-size: 18px; }
+}
 
 /* ------------------------------------------------------------------ cards */
 
@@ -169,6 +238,9 @@
   transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
 }
 .listrow:hover { border-color: rgba(255, 255, 255, 0.2); }
+.listrow__title { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.listrow__sub { font-size: 11px; color: var(--dim); margin-top: 2px; }
+.listrow__best { font-size: 14px; font-weight: 700; flex: none; }
 .listrow[aria-current='true'],
 .listrow.is-active {
   background: var(--accent-wash);
@@ -223,6 +295,8 @@
 .sheet__body { font-size: 15px; line-height: 1.55; color: var(--muted); }
 .sheet__actions { display: flex; gap: 10px; margin-top: 6px; }
 .sheet__actions .btn { flex: 1; }
+.sheet__actions--stacked { flex-direction: column; gap: 8px; margin-top: 0; }
+.sheet__actions--stacked .btn { flex: none; width: 100%; }
 
 .toast {
   position: fixed;
@@ -242,6 +316,11 @@
   pointer-events: none;
 }
 .toast.is-warn { border-color: var(--danger-line); color: var(--danger); }
+/* Above the dock, not underneath it. */
+body.has-dock:not(.is-typing) .toast { bottom: calc(var(--dock-h) + 14px + env(safe-area-inset-bottom)); }
+@media (min-width: 1080px) {
+  body.has-dock .toast { bottom: calc(28px + env(safe-area-inset-bottom)); }
+}
 
 /* -------------------------------------------------------------- settings */
 
@@ -318,6 +397,67 @@
 }
 .seg__btn:hover { color: var(--text-2); }
 .seg__btn.is-active { background: var(--accent-soft); color: var(--accent); }
+.seg__btn:disabled { cursor: not-allowed; opacity: 0.6; }
+@media (max-width: 1079px) {
+  .seg__btn { min-height: 44px; font-size: 15px; }
+}
+
+/* ------------------------------------------------------------ the roller */
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--control);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 4px;
+}
+.stepper__btn {
+  width: 52px;
+  height: 48px;
+  border-radius: 9px;
+  background: var(--chip);
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--text-2);
+  flex: none;
+  touch-action: manipulation;
+}
+.stepper__btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.stepper__btn:active:not(:disabled) { background: var(--accent-soft); color: var(--accent); }
+.stepper__value { flex: 1; display: flex; align-items: baseline; justify-content: center; gap: 8px; }
+.stepper__num { font-family: var(--mono); font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stepper__unit { font-size: 14px; color: var(--dim); }
+
+.more {
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 0 14px;
+}
+.more[open] { padding-bottom: 14px; }
+.more__summary {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-3);
+  list-style: none;
+}
+.more__summary::-webkit-details-marker { display: none; }
+.more__summary::after { content: '▾'; color: var(--dim); transition: transform var(--dur) var(--ease); }
+.more[open] .more__summary::after { transform: rotate(180deg); }
+.more__hint { flex: 1; text-align: right; font-size: 12px; color: var(--faint); font-family: var(--mono); }
+
+/* ----------------------------------------------------------- detail head */
+
+.dhead { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.dhead__title { font-size: 24px; overflow-wrap: anywhere; }
 
 .numrow { display: flex; flex-wrap: wrap; gap: 6px; }
 .numchip {
@@ -375,13 +515,24 @@
 .tinput::placeholder { color: var(--faint); }
 .tinput:disabled { opacity: 0.5; }
 .tinput--area { font-family: var(--sans); resize: vertical; line-height: 1.5; }
+.tinput--num { text-align: center; font-size: 18px; font-weight: 700; min-width: 0; }
+/* iOS zooms the page into any field under 16px; keep them all at or above it. */
+@media (max-width: 1079px) {
+  .tinput { font-size: 16px; min-height: 48px; }
+  .tinput--num { font-size: 20px; }
+}
 
 .trow { display: flex; gap: 8px; align-items: stretch; }
 .trow .tinput { flex: 1; }
 .trow .btn { flex: none; white-space: nowrap; }
+.trow .tinput--num { flex: 1 1 0; }
+.trow__colon { align-self: center; font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--dim); }
+@media (max-width: 1079px) {
+  .trow .btn { min-height: 48px; padding: 0 20px; font-size: 16px; }
+}
 
-.tcheck { display: flex; align-items: center; gap: 9px; font-size: 13px; color: var(--dim); cursor: pointer; }
-.tcheck input { width: 16px; height: 16px; accent-color: var(--accent); }
+.tcheck { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--dim); cursor: pointer; min-height: 36px; }
+.tcheck input { width: 20px; height: 20px; accent-color: var(--accent); flex: none; }
 
 .tnote { font-size: 13px; color: var(--dim); line-height: 1.5; }
 
@@ -389,7 +540,12 @@
 /* The page-wide summary carries a fifth tile. */
 .tstats--wide { grid-template-columns: repeat(5, 1fr); }
 @media (max-width: 700px) {
-  .tstats, .tstats--wide { grid-template-columns: repeat(2, 1fr); }
+  .tstats--wide { grid-template-columns: repeat(6, 1fr); }
+  .tstats--wide > * { grid-column: span 2; }
+  .tstats--wide > :nth-child(n + 4) { grid-column: span 3; }
+}
+@media (max-width: 360px) {
+  .tstats { grid-template-columns: repeat(2, 1fr); }
 }
 .tstat {
   background: var(--surface);
@@ -398,11 +554,15 @@
   padding: 11px 10px;
 }
 .tstat__label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; color: var(--faint); margin-bottom: 5px; }
-.tstat__value { font-family: var(--mono); font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tstat__value { font-family: var(--mono); font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (max-width: 1079px) {
+  .tstat { padding: 10px 8px; }
+  .tstat__value { font-size: 15px; }
+}
 
 .tdel {
-  width: 26px;
-  height: 26px;
+  width: 36px;
+  height: 36px;
   border-radius: 7px;
   color: var(--faint);
   font-size: 17px;
@@ -410,6 +570,95 @@
   flex: none;
 }
 .tdel:hover { color: var(--danger); background: var(--danger-soft); }
+
+/* --------------------------------------------------- phone stopwatch dock */
+
+.dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: var(--dock-h);
+  padding: 12px var(--gutter) calc(12px + env(safe-area-inset-bottom));
+  background: rgba(12, 14, 17, 0.94);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid var(--line-2);
+  transition: border-color var(--dur) var(--ease);
+}
+.dock[data-state='running'] { border-top-color: var(--accent-line-strong); }
+.dock__readout { flex: none; min-width: 0; max-width: 42%; }
+.dock__face {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.dock[data-state='running'] .dock__face { color: var(--accent); }
+.dock__sub {
+  font-size: 12px;
+  color: var(--dim);
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dock__actions { flex: 1; display: flex; gap: 8px; min-width: 0; }
+.dock__actions .btn { min-height: 58px; touch-action: manipulation; white-space: nowrap; }
+.dock__actions .btn--grow { font-size: 18px; padding: 0 12px; }
+.dock__actions .btn--square { width: 50px; }
+.dock__actions .btn { gap: 7px; }
+@media (max-width: 360px) {
+  /* The clock face already shows the reading; the button only has to say Save. */
+  .dock__actions .btn__time, .more__hint { display: none; }
+  .dock__face { font-size: 24px; }
+  .dock__actions .btn--square { width: 44px; }
+  .dock__actions .btn--grow { font-size: 16px; }
+}
+body.is-typing .dock { display: none; }
+
+@media (min-width: 1080px) {
+  .dock { display: none !important; }
+}
+@media (max-width: 1079px) {
+  /* The inline stopwatch is the dock's job on a phone. */
+  .tt2 .sw { display: none; }
+}
+
+/* ---------------------------------------------------------- save status */
+
+.savestate {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: var(--accent-wash);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--r-md);
+  padding: 14px;
+}
+.savestate.is-warn { background: var(--danger-soft); border-color: var(--danger-line); }
+.savestate__icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex: none;
+}
+.savestate.is-warn .savestate__icon { background: var(--danger); color: #1a0508; }
+.savestate__title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.savestate.is-warn .savestate__title { color: var(--danger); }
+.savestate__body { font-size: 13px; color: var(--muted); line-height: 1.45; }
+.savestate__note { font-size: 9px; letter-spacing: 0.14em; color: var(--accent); margin-top: 8px; }
 
 .tmeta {
   display: grid;
@@ -465,6 +714,13 @@
 .databtn:disabled { opacity: 0.4; cursor: not-allowed; }
 .databtn__label { font-size: 14px; font-weight: 600; color: var(--text-2); }
 .databtn__hint { font-size: 12px; color: var(--dim); line-height: 1.4; }
+.databtn.is-primary { border-color: var(--accent-line); }
+.databtn.is-primary .databtn__label { color: var(--accent); }
+.databtn.is-danger .databtn__label { color: var(--danger); }
+@media (max-width: 1079px) {
+  .databtn { min-height: 60px; padding: 13px 14px; }
+  .databtn__label { font-size: 15px; }
+}
 
 /* --- the setup sheet: a lettered grid meant to be transcribed, or printed. */
 
@@ -472,19 +728,32 @@
   background: var(--well);
   border: 1px solid var(--line);
   border-radius: var(--r-2xl);
-  padding: 16px 14px;
+  padding: 12px 10px;
   overflow-x: auto;
 }
+/* Sized so the whole 11-wide board fits a phone with no sideways scroll:
+   the width, less page gutters, wrap padding, row labels and the 11 gaps. */
 .tsheet {
-  --tsheet-bead: clamp(20px, calc((min(100vw, 640px) - 108px) / 11), 34px);
-  --tsheet-label: 18px;
+  --tsheet-bead: clamp(18px, calc((min(100vw, 720px) - 2 * var(--gutter) - 22px - 14px - 33px) / 11), 34px);
+  --tsheet-label: 14px;
+  --tsheet-gap: 3px;
   display: flex;
   flex-direction: column;
   gap: 18px;
   min-width: max-content;
+  margin: 0 auto;
 }
-.tsheet--layers { flex-direction: row; flex-wrap: wrap; gap: 20px; align-items: flex-start; min-width: 0; }
-.tsheet__grid { display: grid; gap: 4px; justify-items: center; align-items: center; }
+/* Pyramid layers: two 5-wide layers side by side on a phone. */
+.tsheet--layers {
+  --tsheet-bead: clamp(18px, calc((min(100vw, 720px) - 2 * var(--gutter) - 22px - 18px - 2 * 14px - 10 * 3px) / 10), 32px);
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px 18px;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+}
+.tsheet__grid { display: grid; gap: var(--tsheet-gap); justify-items: center; align-items: center; }
 .tsheet__corner { display: block; }
 .tsheet__axis {
   font-family: var(--mono);
@@ -591,38 +860,63 @@
 .movelog__row:last-child { border-bottom: none; }
 .movelog__dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); flex: none; }
 .movelog__dot.is-warn { background: var(--danger); }
-.movelog__text { flex: 1; font-family: var(--mono); font-size: 12px; color: var(--text-3); }
-.movelog__t { font-family: var(--mono); font-size: 11px; color: var(--faint); }
+.movelog__text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-3);
+}
+.movelog__tag {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.movelog__tag.is-warn { background: var(--danger-soft); color: var(--danger); }
+.movelog__t { font-family: var(--mono); font-size: 15px; font-weight: 700; color: var(--text-2); font-variant-numeric: tabular-nums; }
 
 /* ---------------------------------------------------------------- panels */
 
-/* On a phone the panels are one column, read in the order they are used: roll
-   an opening, look at it, find an older one, then back it up. `display:
-   contents` dissolves the desktop side column so `order` can interleave its
-   children with the sheet — which keeps each panel a single live node rather
-   than two copies fighting over the same DOM. */
+/* On a phone the page is one column split into three tabs. `display: contents`
+   dissolves both desktop columns so `order` can interleave their sections —
+   the roller above the sheet on Play, the totals above the list on Log — which
+   keeps each panel a single live node rather than two copies of the same DOM.
+
+   Nothing on a phone is its own scroll container: the document scrolls, so a
+   swipe anywhere moves the page. (A nested `overflow: auto` box that never
+   actually overflows swallows the swipe, which is what froze the old layout.) */
 .tt2 { display: flex; flex-direction: column; }
-.tt2__main { display: flex; flex-direction: column; gap: 22px; padding: 20px 22px 8px; }
-.tt2__gen { padding: 20px 22px 4px; }
-.tt2__log { padding: 14px 22px 4px; }
-.tt2__data { padding: 14px 22px 32px; }
 
-.desk-only { display: none; }
-
-/* `order` would reach grid items too, so the phone ordering is scoped to the
-   phone; on a wide screen the columns are placed by the grid below. */
 @media (max-width: 1079px) {
-  .tt2__side { display: contents; }
+  .tt2 { padding-bottom: 24px; }
+  body.has-dock .tt2 { padding-bottom: calc(var(--dock-h) + 24px + env(safe-area-inset-bottom)); }
+  .tt2__main, .tt2__side { display: contents; }
+  .tt2 [data-panel] { padding: 16px var(--gutter) 0; width: 100%; max-width: 720px; margin: 0 auto; }
   .tt2__gen { order: 1; }
-  .tt2__main { order: 2; }
-  .tt2__log { order: 3; }
-  .tt2__data { order: 4; }
+  .tt2__detail { order: 2; padding-top: 22px; }
+  .tt2__summary { order: 3; }
+  .tt2__log { order: 4; }
+  .tt2__data { order: 5; }
+  .tt2__detail > .stack { scroll-margin-top: calc(80px + env(safe-area-inset-top)); }
+
+  .tt2[data-tab='play'] [data-panel]:not([data-panel='play']),
+  .tt2[data-tab='log'] [data-panel]:not([data-panel='log']),
+  .tt2[data-tab='data'] [data-panel]:not([data-panel='data']) { display: none; }
 }
 
 @media (min-width: 1080px) {
-  .desk-only { display: block; }
+  /* The wide layout is a fixed-height shell with two scrolling columns. */
+  #app { height: 100dvh; min-height: 0; }
+  .screen { min-height: 0; }
   .tt2 { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 400px; }
-  .tt2__main { padding: 36px 32px; gap: 26px; overflow-y: auto; }
+  .tt2__main { display: flex; flex-direction: column; padding: 36px 32px; gap: 26px; overflow-y: auto; }
   .tt2__side {
     border-left: 1px solid var(--line);
     background: var(--panel);
@@ -632,8 +926,8 @@
     gap: 30px;
     overflow-y: auto;
   }
-  .tt2__gen, .tt2__log, .tt2__data { padding: 0; }
-  .tsheet { --tsheet-bead: 38px; --tsheet-label: 20px; }
+  .tsheet { --tsheet-bead: 38px; --tsheet-label: 20px; --tsheet-gap: 4px; margin: 0; }
+  .tsheet--layers { justify-content: flex-start; }
   .tsheet__bead { font-size: 17px; }
   .sheet { align-items: center; }
   .sheet__panel { margin: 0; }

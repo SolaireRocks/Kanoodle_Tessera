@@ -31,13 +31,18 @@ function blank() {
   };
 }
 
-/** Accept only what we wrote; anything else is treated as a fresh install. */
+/**
+ * Accept only what we wrote. Anything else starts a fresh logbook — but the
+ * unreadable copy is set aside first, because the very next save would
+ * otherwise overwrite the only record of those times.
+ */
 function read() {
+  let raw = null;
   try {
-    const raw = localStorage.getItem(KEY);
+    raw = localStorage.getItem(KEY);
     if (!raw) return blank();
     const parsed = JSON.parse(raw);
-    if (parsed.version !== LOG_VERSION) return blank();
+    if (!parsed || parsed.version !== LOG_VERSION) throw new Error('Unknown logbook version.');
     return {
       ...blank(),
       ...parsed,
@@ -45,7 +50,23 @@ function read() {
       setups: Array.isArray(parsed.setups) ? parsed.setups.map(normalizeSetup).filter(Boolean) : []
     };
   } catch {
+    if (raw) {
+      try {
+        const aside = `${KEY}.unreadable`;
+        if (localStorage.getItem(aside) !== raw) localStorage.setItem(aside, raw);
+      } catch { /* nowhere to put it */ }
+    }
     return blank();
+  }
+}
+
+/**
+ * Keep the logbook under the cap by dropping the oldest openings that have no
+ * times. An opening with a recorded time is never thrown away to make room.
+ */
+function trim(setups) {
+  for (let i = setups.length - 1; i >= 0 && setups.length > MAX_SETUPS; i--) {
+    if (!setups[i].times.length) setups.splice(i, 1);
   }
 }
 
@@ -92,7 +113,17 @@ class Store extends EventTarget {
     super();
     this.data = read();
     this.writeFailed = false;
+    this.persisted = null;
     this.applyDocumentSettings();
+
+    // Two tabs on one logbook: without this, whichever tab saved last would
+    // silently overwrite the other's times with its stale copy.
+    window.addEventListener('storage', (event) => {
+      if (event.key !== KEY || event.newValue === null) return;
+      this.data = read();
+      this.applyDocumentSettings();
+      this.dispatchEvent(new CustomEvent('change', { detail: { external: true } }));
+    });
   }
 
   get settings() { return this.data.settings; }
@@ -102,12 +133,30 @@ class Store extends EventTarget {
     try {
       localStorage.setItem(KEY, JSON.stringify(this.data));
       this.writeFailed = false;
+      this.requestPersistence();
     } catch {
       // Private mode, or a full quota. The session keeps working in memory; the
       // banner in the header is what tells the player to export before leaving.
       this.writeFailed = true;
     }
     this.dispatchEvent(new CustomEvent('change'));
+  }
+
+  /**
+   * Ask the browser not to evict this origin's storage under pressure — Safari
+   * and Chrome both clear "best-effort" site data on their own schedule. Asked
+   * once, after the first successful write; the answer is only informational.
+   */
+  requestPersistence() {
+    if (this.persisted !== null || !navigator.storage?.persist) return;
+    this.persisted = false;
+    navigator.storage.persisted()
+      .then((already) => already || navigator.storage.persist())
+      .then((granted) => {
+        this.persisted = Boolean(granted);
+        this.dispatchEvent(new CustomEvent('change'));
+      })
+      .catch(() => {});
   }
 
   /** The settings the stylesheet reads off <html>. */
@@ -150,7 +199,7 @@ class Store extends EventTarget {
       times: []
     });
     this.data.setups.unshift(entry);
-    if (this.data.setups.length > MAX_SETUPS) this.data.setups.length = MAX_SETUPS;
+    trim(this.data.setups);
     this.save();
     return entry;
   }
@@ -184,7 +233,7 @@ class Store extends EventTarget {
     const entry = this.setup(id);
     if (!entry || !Number.isFinite(ms) || ms <= 0) return null;
     const time = {
-      id: `t-${Date.now().toString(36)}-${entry.times.length}`,
+      id: newId('t'),
       ms: Math.round(ms),
       at,
       assisted: Boolean(assisted)
@@ -203,6 +252,11 @@ class Store extends EventTarget {
   }
 
   /* -------------------------------------------------------------- digests - */
+
+  /** Every recorded attempt, across every opening. */
+  get timeCount() {
+    return this.data.setups.reduce((n, entry) => n + entry.times.length, 0);
+  }
 
   /** Headline numbers across the whole logbook. */
   summary() {
@@ -253,7 +307,8 @@ class Store extends EventTarget {
     if (!incoming.length) throw new Error('No openings were found in that file.');
 
     if (mode === 'replace') {
-      this.data.setups = incoming.slice(0, MAX_SETUPS);
+      this.data.setups = incoming;
+      trim(this.data.setups);
       if (payload.settings) this.data.settings = { ...DEFAULT_SETTINGS, ...payload.settings };
       this.applyDocumentSettings();
       this.save();
@@ -292,7 +347,7 @@ class Store extends EventTarget {
       if (!match.note && entry.note) match.note = entry.note;
     }
     this.data.setups.sort((a, b) => b.createdAt - a.createdAt);
-    if (this.data.setups.length > MAX_SETUPS) this.data.setups.length = MAX_SETUPS;
+    trim(this.data.setups);
     this.save();
     return { mode, addedSetups, addedTimes };
   }

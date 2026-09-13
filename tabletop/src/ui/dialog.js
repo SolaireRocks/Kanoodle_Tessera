@@ -8,7 +8,7 @@ const overlay = () => document.getElementById('overlay');
  * @param {{title:string, body?:string|Node, actions:Array<{label:string, value:*, variant?:string}>}} config
  * @returns {Promise<*>} the chosen action's value, or null if dismissed
  */
-export function sheet({ title, body, actions = [], dismissable = true }) {
+export function sheet({ title, body, actions = [], dismissable = true, stacked = false }) {
   return new Promise((resolve) => {
     const host = overlay();
     const previousFocus = document.activeElement;
@@ -16,7 +16,7 @@ export function sheet({ title, body, actions = [], dismissable = true }) {
     const panel = h('div', { class: 'sheet__panel', role: 'dialog', 'aria-modal': 'true', 'aria-label': title },
       h('h2', { class: 'sheet__title', text: title }),
       body ? (typeof body === 'string' ? h('div', { class: 'sheet__body', text: body }) : body) : null,
-      h('div', { class: 'sheet__actions' },
+      h('div', { class: `sheet__actions${stacked ? ' sheet__actions--stacked' : ''}` },
         ...actions.map((action) => h('button', {
           class: `btn btn--${action.variant || 'ghost'}`,
           text: action.label,

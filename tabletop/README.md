@@ -82,12 +82,22 @@ occupied socket carries its piece letter, so the sheet reads correctly in
 greyscale and on paper. `Copy setup` puts the whole thing on the clipboard as
 text with an ASCII diagram; `Print sheet` prints it with blank lines for times.
 
-**Time it.** Press `Space`, or Start. Stop and the reading is offered as a save
-against the opening on screen. Times typed by hand are just as welcome —
-`2:05`, `1:02:30`, `125` for seconds, and `2m 5s` all parse.
+**Time it.** On a phone the stopwatch is docked at the bottom of the screen:
+Start, Stop, Save. On a wide screen press `Space`, or Start. Stop and the
+reading is offered as a save against the opening on screen. The clock survives
+a screen lock or a reload, and asks the phone to keep the screen on while it
+runs. Times typed by hand are just as welcome — separate minutes and seconds
+fields, since a phone's number pad has no colon.
+
+**On a phone** the page is three tabs: *Play* (roll, the sheet, your times),
+*Log* (every opening and its best) and *Data* (backups and settings). The
+surface and piece count you last used are remembered.
 
 **Get them out.** The logbook lives in this browser's localStorage and nowhere
-else, so export is the only backup there is:
+else. Every time is written the moment it is recorded, the browser is asked to
+keep the storage from automatic cleanup, and two open tabs stay in sync rather
+than overwriting each other. Export is still the only backup there is — on a
+phone it opens the share sheet, so you can save to Files or send it anywhere:
 
 | | |
 | --- | --- |

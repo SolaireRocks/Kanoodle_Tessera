@@ -28,6 +28,22 @@ import { store } from './store.js';
  * gives a silently empty file.
  */
 export function downloadFile(filename, text, type = 'text/plain;charset=utf-8') {
+  // On a phone a "download" lands somewhere hard to find — or nowhere, from a
+  // home-screen app on iOS — so the share sheet is offered instead: Save to
+  // Files, AirDrop, mail it to yourself. Desktop keeps the plain download.
+  if (matchMedia('(pointer: coarse)').matches && navigator.canShare) {
+    const file = new File([text], filename, { type });
+    if (navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file], title: filename }).catch((error) => {
+        if (error?.name !== 'AbortError') saveBlob(filename, text, type);
+      });
+      return filename;
+    }
+  }
+  return saveBlob(filename, text, type);
+}
+
+function saveBlob(filename, text, type) {
   const url = URL.createObjectURL(new Blob([text], { type }));
   const link = document.createElement('a');
   link.href = url;
@@ -95,7 +111,7 @@ export function timesCsv(setups = store.setups) {
   ]];
 
   for (const entry of setups) {
-    const best = timeStats(entry.times).bestMs;
+    const best = timeStats(entry.times.filter((t) => !t.assisted)).bestMs;
     entry.times.forEach((time, i) => {
       rows.push([
         entry.id,
